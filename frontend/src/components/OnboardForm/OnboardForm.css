@@ -1,0 +1,113 @@
+.onboard-form {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
+
+.onboard-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 1px solid black;
+  border-radius: 16px;
+  background-color: white;
+  padding: 1.5em;
+  font-family: var(--brand-sans);
+  overflow: visible;
+  gap: 1em;
+}
+
+.onboard-form input[type="text"] {
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 14em;
+}
+
+.onboard-form .radio-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--brand-sans);
+}
+
+.onboard-form .radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  cursor: pointer;
+}
+
+.onboard-form button {
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6em 1em;
+  border-radius: 50px;
+  cursor: pointer;
+  color: #1a1a1a;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: var(--brand-sans);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.onboard-form button:hover {
+  background-color: #f0f0f0;
+}
+
+.product-options {
+  position: relative;
+  width: 100%;
+}
+
+.product-options summary {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.6em 1em;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--brand-sans);
+  color: #1a1a1a;
+  list-style: none;
+}
+
+.product-options summary:hover {
+  border-color: #999;
+}
+
+.product-options summary::-webkit-details-marker {
+  display: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4em 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.dropdown-menu label {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: var(--brand-sans);
+}
+
+.dropdown-menu label:hover {
+  background-color: #f5f5f5;
+}
