@@ -1,0 +1,25 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_APP=api:create_app()
+      - FLASK_DEBUG=1 
+    restart: unless-stopped
+
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # prevents host from overwriting container's node_modules
+    command: npm run dev -- --host 
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,68 @@
+.orders-container {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 16px;
+    padding: 1.5em;
+    font-family: var(--brand-sans);
+    min-width: 280px;
+    max-width: 360px;
+    text-align: left;
+}
+
+.orders-container h1 {
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 1em 0;
+    color: #1a1a1a;
+}
+
+.order-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.6em 1em;
+    margin-bottom: 0.6em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6em;
+    font-family: var(--brand-sans);
+}
+
+.order-card:last-child {
+    margin-bottom: 0;
+}
+
+.order-name {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.order-status {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.3em 0.8em;
+    border-radius: 50px;
+    margin: 0;
+    text-transform: capitalize;
+    font-family: var(--brand-sans);
+}
+
+.order-status.pending {
+    background-color: #fff3e0;
+    color: #e65100;
+}
+
+.order-status.completed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.order-cost {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin: 0;
+    white-space: nowrap;
+}
