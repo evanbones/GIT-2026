@@ -25,3 +25,4 @@ dist-ssr
 
 # Venv dir 
 venv/
+__pycache__/
