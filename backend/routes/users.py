@@ -1,6 +1,7 @@
 from flask import request
 from flask_restx import Namespace, Resource
-from services.user_service import get_all_users, get_user, create_user, delete_user
+
+from services.user_service import create_user, delete_user, get_all_users, get_user
 
 users_ns = Namespace("users", description="User operations")
 
@@ -26,6 +27,4 @@ class User(Resource):
     def delete(self, user_id):
         """Delete a user by ID"""
         deleted = delete_user(user_id)
-        return (
-            ({"message": "Deleted"}, 200) if deleted else ({"error": "Not found"}, 404)
-        )
+        return ({"message": "Deleted"}, 200) if deleted else ({"error": "Not found"}, 404)

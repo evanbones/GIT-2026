@@ -1,9 +1,11 @@
 import os
+
 from dotenv import load_dotenv
 from flask import Flask
 from flask_restx import Api
-from routes import users_ns
+
 from database import init_db
+from routes import users_ns
 
 load_dotenv()
 
