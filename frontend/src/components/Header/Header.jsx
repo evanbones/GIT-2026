@@ -2,14 +2,17 @@ import React from "react";
 import "./Header.css";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 
-function Header() {
+function Header({ account, setAccount }) {
+  let links;
+  if (account) {
+    // Add account-specific links here
+  }
+
   return (
     <header className="navbar">
-      <div className="container">
-        <div className="search">
-          <SearchBar />
-        </div>
-      </div>
+
+      <a href="/map">Map</a>
+      <a href="/dashboard">Dashboard</a>
     </header>
   );
 }
