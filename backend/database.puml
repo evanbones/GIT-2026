@@ -1,0 +1,166 @@
+@startuml
+skinparam class {
+    BackgroundColor LightYellow
+    ArrowColor #4A90E2
+    BorderColor #E0D68A
+}
+
+class User {
+    + id : int [PK]
+    + email : varchar
+    + password_hash : varchar
+    + created_at : datetime
+    + user_type : varchar
+    + description : text
+    + profile_photo : blob
+}
+
+class Producer {
+    + company_name : varchar
+    + primary_address : text
+    + description : text
+    + images : blob
+}
+
+class Retailer {
+    + company_name : varchar
+    + store_address : text
+    + images : blob
+}
+
+class Consumer {
+    + first_name : varchar
+    + last_name : varchar
+    + shipping_address : text
+}
+
+class Item {
+    + id : int [PK]
+    + producer_id : int [FK]
+    + name : varchar
+    + description : text
+    + sku : varchar
+    + unit_type : varchar
+}
+
+class Price {
+    + id : int [PK]
+    + item_id : int [FK]
+    + min_quantity : int
+    + max_quantity : int
+    + price_per_unit : float
+}
+
+class Inventory {
+    + id : int [PK]
+    + retailer_id : int [FK]
+    + last_updated : datetime
+}
+
+class Stock {
+    + id : int [PK]
+    + inventory_id : int [FK, nullable]
+    + item_id : int [FK]
+    + quantity : float
+    + batch_number : varchar
+    + expiration_date : date
+    + origin_date : datetime
+}
+
+class StockRequestList {
+    + id : int [PK]
+    + producer_id : int [FK]
+    + status : varchar
+    + created_at : datetime
+}
+
+class StockRequest {
+    + id : int [PK]
+    + list_id : int [FK]
+    + retailer_id : int [FK]
+    + item_id : int [FK]
+    + quantity_requested : float
+    + status : varchar
+}
+
+class GroupBuy {
+    + id : int [PK]
+    + initiator_retailer_id : int [FK]
+    + item_id : int [FK]
+    + target_quantity : float
+    + current_quantity : float
+    + deadline : datetime
+    + status : varchar
+}
+
+class GroupBuyParticipant {
+    + group_buy_id : int [FK]
+    + retailer_id : int [FK]
+    + pledged_quantity : float
+    + joined_at : datetime
+}
+
+class BuyStockOffer {
+    + id : int [PK]
+    + retailer_id : int [FK]
+    + producer_id : int [FK]
+    + item_id : int [FK]
+    + offered_price : float
+    + requested_quantity : float
+    + status : varchar
+}
+
+class InventoryOrder {
+    + id : int [PK]
+    + consumer_id : int [FK]
+    + retailer_id : int [FK]
+    + order_date : datetime
+    + total_amount : float
+    + status : varchar
+}
+
+class OrderItem {
+    + id : int [PK]
+    + order_id : int [FK]
+    + stock_id : int [FK]
+    + quantity : float
+    + unit_price : float
+}
+
+' Inheritance
+User <|-- Producer : is a
+User <|-- Consumer : is a
+User <|-- Retailer : is a
+
+Producer "1" --> "0..*" Item : produces
+Item "1" *-- "1..*" Price : has tiers
+
+' Inventory
+Producer "1" --> "0..*" Stock : creates initial
+Retailer "1" --> "1" Inventory : owns
+Inventory "1" *-- "0..*" Stock : contains
+Item "1" <-- "0..*" Stock : instances of
+
+' Requests
+Producer "1" <-- "0..*" StockRequestList : receives
+StockRequestList "1" *-- "1..*" StockRequest : aggregates
+Retailer "1" --> "0..*" StockRequest : makes
+Item "1" <-- "0..*" StockRequest : specifies
+
+' B2B
+Retailer "1" --> "0..*" GroupBuy : initiates
+GroupBuy "1" *-- "1..*" GroupBuyParticipant : includes
+Retailer "1" --> "0..*" GroupBuyParticipant : joins
+GroupBuy "*" --> "1" Item : targets
+
+Retailer "1" --> "0..*" BuyStockOffer : proposes
+BuyStockOffer "*" --> "1" Item : specifies
+Producer "1" <-- "0..*" BuyStockOffer : reviews
+
+' B2C
+Consumer "1" --> "0..*" InventoryOrder : places
+Retailer "1" --> "0..*" InventoryOrder : fulfills
+InventoryOrder "1" *-- "1..*" OrderItem : contains
+OrderItem "*" --> "1" Stock : deducts from
+
+@enduml

@@ -66,6 +66,12 @@ pre-commit install
 
 ---
 
+## Diagrams
+
+![Database UML Diagram](images/database-uml.png)
+
+---
+
 ## Code Linting/Formatting (Ruff)
 
 To check code for formatting/linting:
