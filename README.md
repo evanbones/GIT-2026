@@ -54,3 +54,35 @@ docker-compose up --build
 
 - Frontend (Vite/React): Open `http://localhost:5173` in your browser.
 - Backend (Flask API): Available at `http://localhost:8000`.
+- Docs (Swagger): Available at `http://localhost:8000/docs`.
+
+4. **(Optional) Install pre-commit hooks for automatic linting/formatting**
+
+- Once installed, pre-commit will automatically run before every git commit.
+
+```bash
+pre-commit install
+```
+
+---
+
+## Code Linting/Formatting (Ruff)
+
+To check code for formatting/linting:
+
+```bash
+# In the backend/ directory:
+
+# Check for linting issues
+ruff check .
+
+# Auto-fix what can be fixed automatically
+ruff check . --fix
+
+# Format all code
+ruff format .
+
+# Verify everything passes
+ruff check .
+ruff format --check .
+```
