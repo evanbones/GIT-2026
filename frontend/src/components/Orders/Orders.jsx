@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import './Orders.css';
 
-/**
- * Enhanced Orders Component
- * Displays group order progress and allows leaving open orders.
- */
 function Orders() {
-    // Mock data for user's joined orders
+    // mock data for user's joined orders
     const [orders, setOrders] = useState([
         { 
             id: 1, 
