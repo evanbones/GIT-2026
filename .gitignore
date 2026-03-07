@@ -26,3 +26,6 @@ dist-ssr
 # Venv dir 
 venv/
 __pycache__/
+
+#.env variables
+.env
