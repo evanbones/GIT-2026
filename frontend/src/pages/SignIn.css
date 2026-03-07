@@ -1,0 +1,72 @@
+.signin-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2em;
+}
+
+.signin-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid black;
+    border-radius: 16px;
+    background-color: white;
+    padding: 2em;
+    font-family: var(--brand-sans);
+    gap: 1em;
+    width: 100%;
+    max-width: 360px;
+}
+
+.signin-form h2 {
+    margin: 0 0 0.2em 0;
+    font-family: var(--brand-serif);
+    font-size: 1.5rem;
+    color: #1a1a1a;
+}
+
+.signin-form input[type="text"],
+.signin-form input[type="password"] {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.6em 1em;
+    font-size: 1rem;
+    font-family: var(--brand-sans);
+    color: #1a1a1a;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.signin-form input[type="text"]:focus,
+.signin-form input[type="password"]:focus {
+    border-color: #1a1a1a;
+}
+
+.signin-form button {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 0.6em 1.6em;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--brand-sans);
+    transition: background-color 0.2s ease-in-out;
+    align-self: flex-end;
+}
+
+.signin-form button:hover {
+    background-color: #333;
+}
+
+.signin-error {
+    color: #e53935;
+    font-size: 0.9rem;
+    margin: 0;
+    font-weight: 500;
+}

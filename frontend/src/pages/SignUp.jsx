@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
 
-function SignUp() {
+function SignUp({ setAccount }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -33,6 +33,7 @@ function SignUp() {
         } else {
             setError("");
             // put info in db
+            setAccount = true;
             navigate("/onboard");
         }
     }
