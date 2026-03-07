@@ -17,9 +17,10 @@ itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.3
 packaging==26.0
+pre-commit==4.4.0
 pytz==2026.1.post1
+ruff==0.14.4
 six==1.17.0
 SQLAlchemy==2.0.48
 typing_extensions==4.15.0
 Werkzeug==3.1.6
-ruff==0.14.4
