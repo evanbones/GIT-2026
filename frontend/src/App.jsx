@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import MapView from "./pages/MapView.jsx";
+import Onboard from "./pages/Onboard.jsx"
 
 function App() {
   const [account, setAccount] = useState(false);
@@ -16,8 +17,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home account={account} setAccount={setAccount} />} />
           <Route path="/dashboard" element={<Dashboard account={account} setAccount={setAccount} />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp setAccount={setAccount} />} />
+          <Route path="/sign-in" element={<SignIn setAccount={setAccount} />} />
+          <Route path="/onboard" element={<Onboard account={account} />} />
           <Route path="/map" element={<MapView />} />
         </Routes>
       </BrowserRouter>
