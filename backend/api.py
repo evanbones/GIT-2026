@@ -1,10 +1,12 @@
 from flask import Flask
-from routes import users_bp
+from flask_restx import Api
+from routes import users_ns
 
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(users_bp)
+    api = Api(app, title="API", version="1.0", doc="/docs")
+    api.add_namespace(users_ns, path="/users")
     return app
 
 
