@@ -39,12 +39,14 @@ user_update_model = users_ns.model(
 
 @users_ns.route("")
 class UserList(Resource):
+    @users_ns.doc(params={"type": "Filter users by type (e.g., producer, retailer, consumer)"})
     @users_ns.response(200, "Success")
     def get(self):
         """
-        List all users.
+        List all users, optionally filtered by type.
         """
-        return {"users": get_all_users()}, 200
+        user_type = request.args.get("type")
+        return {"users": get_all_users(user_type)}, 200
 
     @users_ns.expect(user_model)
     @users_ns.response(201, "User successfully created")

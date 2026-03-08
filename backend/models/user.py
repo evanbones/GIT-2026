@@ -56,22 +56,31 @@ class Producer(User):
     images = db.Column(db.LargeBinary)
     lat = db.Column(db.Float, nullable=True)
     lng = db.Column(db.Float, nullable=True)
+    items = db.relationship("Item", backref="producer", lazy="select")
 
     inventory = db.relationship("Inventory", backref="producer_user", uselist=False, foreign_keys="Inventory.producer_id")
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}
 
     def to_dict(self):
-        return {
-            **super().to_dict(),
-            "company_name": self.company_name,
-            "primary_address": self.primary_address,
-            "company_description": self.company_description,
-            "lat": self.lat,
-            "lng": self.lng,
-            "inventory_id": self.inventory.id if self.inventory else None,
-        }
+        data = super().to_dict()
+        data["company_name"] = self.company_name
+        data["primary_address"] = self.primary_address
+        data["company_description"] = self.company_description
+        data["lat"] = self.lat
+        data["lng"] = self.lng
 
+        inventory_data = []
+        for item in self.items:
+            base_price = min([float(p.price_per_unit) for p in item.prices]) if item.prices else 0
+
+            inventory_data.append(
+                {"id": item.id, "name": item.name, "description": item.description, "base_price": base_price}
+            )
+
+        data["inventory"] = inventory_data
+
+        return data
 
 class Retailer(User):
     __tablename__: ClassVar[str] = "retailers"

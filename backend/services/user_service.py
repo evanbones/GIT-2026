@@ -1,17 +1,30 @@
+from sqlalchemy.orm import selectinload
+from models.catalog import Item
 from database import db
 from models.inventory import Inventory
 from models.user import Consumer, Producer, Retailer, User
 
 
-def get_all_users():
+def get_all_users(user_type=None):
     """
-    Retrieves all users from the database.
+    Retrieves users from the database.
+
+    Args:
+        user_type (str, optional): The specific type of user to retrieve
+                                   (e.g., 'producer', 'retailer', 'consumer').
 
     Returns:
         list[dict]: A list of dictionaries representing the users.
-
     """
-    users = User.query.all()
+    if user_type == "producer":
+        users = Producer.query.options(selectinload(Producer.items).selectinload(Item.prices)).all()
+    elif user_type == "retailer":
+        users = Retailer.query.all()
+    elif user_type == "consumer":
+        users = Consumer.query.all()
+    else:
+        users = User.query.all()
+
     return [u.to_dict() for u in users]
 
 
