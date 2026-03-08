@@ -8,7 +8,6 @@
     overflow-x: hidden;
 }
 
-/* Force the footer component to stretch full width */
 .home-wrapper > footer {
     align-self: stretch;
     width: 100%;
@@ -110,7 +109,6 @@
     background-color: var(--farm-hover);
 }
 
-/* ── Features Section ── */
 .features-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -119,7 +117,7 @@
     max-width: 1200px;
     padding: 2rem;
     box-sizing: border-box;
-    margin-top: 2rem; /* Removed the negative overlap so it doesn't crush the hero component */
+    margin-top: 2rem;
     margin-bottom: 4rem;
     z-index: 2;
 }
@@ -159,7 +157,6 @@
     margin: 0;
 }
 
-/* ── Map Preview ── */
 .map-preview-section {
     width: 100%;
     max-width: 1200px;
@@ -186,7 +183,7 @@
     box-shadow: 0 6px 0 var(--farm-border-light);
     overflow: hidden;
     background-color: #e0d7c6;
-    box-sizing: border-box; /* Crucial to keep map from overflowing width */
+    box-sizing: border-box;
     position: relative;
     z-index: 1;
 }
