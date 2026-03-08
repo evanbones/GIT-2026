@@ -5,14 +5,21 @@ from models.inventory import Inventory, Stock
 
 def get_all_inventories():
     inventories = Inventory.query.all()
-    return [{"id": i.id, "producer_id": i.producer_id, "last_updated": str(i.last_updated)} for i in inventories]
+    return [
+        {"id": i.id, "producer_id": i.producer_id, "last_updated": str(i.last_updated)}
+        for i in inventories
+    ]
 
 
 def get_inventory(inventory_id):
     inv = db.session.get(Inventory, inventory_id)
     if not inv:
         return None
-    return {"id": inv.id, "producer_id": inv.producer_id, "last_updated": str(inv.last_updated)}
+    return {
+        "id": inv.id,
+        "producer_id": inv.producer_id,
+        "last_updated": str(inv.last_updated),
+    }
 
 
 def create_inventory(data):
@@ -34,7 +41,12 @@ def delete_inventory(inventory_id):
 def get_all_stocks():
     stocks = Stock.query.all()
     return [
-        {"id": s.id, "inventory_id": s.inventory_id, "item_id": s.item_id, "quantity": float(s.quantity)}
+        {
+            "id": s.id,
+            "inventory_id": s.inventory_id,
+            "item_id": s.item_id,
+            "quantity": float(s.quantity),
+        }
         for s in stocks
     ]
 
@@ -43,7 +55,12 @@ def get_stock(stock_id):
     s = db.session.get(Stock, stock_id)
     if not s:
         return None
-    return {"id": s.id, "inventory_id": s.inventory_id, "item_id": s.item_id, "quantity": float(s.quantity)}
+    return {
+        "id": s.id,
+        "inventory_id": s.inventory_id,
+        "item_id": s.item_id,
+        "quantity": float(s.quantity),
+    }
 
 
 def create_stock(data):
@@ -91,12 +108,14 @@ def create_stock(data):
         db.session.flush()
 
         for p in prices_data:
-            db.session.add(Price(
-                item_id=item.id,
-                min_quantity=p["min_quantity"],
-                max_quantity=p.get("max_quantity"),
-                price_per_unit=p["price_per_unit"],
-            ))
+            db.session.add(
+                Price(
+                    item_id=item.id,
+                    min_quantity=p["min_quantity"],
+                    max_quantity=p.get("max_quantity"),
+                    price_per_unit=p["price_per_unit"],
+                )
+            )
 
     stock = Stock(
         inventory_id=inventory_id,
@@ -208,7 +227,9 @@ def get_item_stock_across_inventories(item_id):
                 "stock_id": s.id,
                 "quantity": float(s.quantity),
                 "batch_number": s.batch_number,
-                "expiration_date": str(s.expiration_date) if s.expiration_date else None,
+                "expiration_date": (
+                    str(s.expiration_date) if s.expiration_date else None
+                ),
                 "inventory_id": inv.id,
                 "producer_id": inv.producer_id,
             }
