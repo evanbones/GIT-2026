@@ -4,12 +4,14 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from flask_restx import Api
-from flask_session import Session
 
 from config.oauth import init_oauth
 from database import init_db
+from flask_session import Session
 from routes.auth import auth_bp
+from routes.b2b import b2b_ns
 from routes.catalog import catalog_ns
+from routes.inventory import inventory_ns
 from routes.orders import orders_ns
 from routes.users import users_ns
 
@@ -34,6 +36,8 @@ def create_app():
     api.add_namespace(users_ns, path="/users")
     api.add_namespace(catalog_ns, path="/catalog")
     api.add_namespace(orders_ns, path="/orders")
+    api.add_namespace(inventory_ns, path="/inventory")
+    api.add_namespace(b2b_ns, path="/b2b")
 
     init_db(app)
     return app

