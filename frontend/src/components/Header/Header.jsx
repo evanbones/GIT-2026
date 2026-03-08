@@ -1,6 +1,5 @@
 import React from "react";
 import "./Header.css";
-import SearchBar from "../SearchBar/SearchBar.jsx";
 
 function Header({ account, setAccount }) {
   let links;
@@ -8,7 +7,7 @@ function Header({ account, setAccount }) {
   if (account) {
     links = (
       <div className="links">
-        <a href="/map">Map</a>
+        <a href="/map">Browse</a>
         <a href="/dashboard">Dashboard</a>
         <a href="/sign-out">Sign Out</a>
       </div>
@@ -16,7 +15,7 @@ function Header({ account, setAccount }) {
   } else {
     links = (
       <div className="links">
-        <a href="/map">Map</a>
+        <a href="/map">Browse</a>
         <a href="/sign-in">Sign In</a>
         <a href="/sign-up">Sign up</a>
       </div>
