@@ -8,6 +8,7 @@ from flask_session import Session
 
 from config.oauth import init_oauth
 from database import init_db
+from routes.auth import auth_bp
 from routes.catalog import catalog_ns
 from routes.orders import orders_ns
 from routes.users import users_ns
