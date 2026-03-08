@@ -4,13 +4,16 @@ import Header from "../components/Header/Header.jsx";
 import SearchSidebar from "../components/SearchPanel/SearchSidebar.jsx";
 import ProducerDetail from "../components/SearchPanel/ProducerDetail.jsx";
 import Checkout from "../components/SearchPanel/Checkout.jsx";
-import { api } from "../utils/api.js";
+import { api, inventoryAPI } from "../utils/api.js";
+import { useAuth } from "../contexts/useAuth.jsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function MapView() {
+  const { user } = useAuth();
   const [producers, setProducers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProducer, setSelectedProducer] = useState(null);
+  const [producerStocks, setProducerStocks] = useState([]);
   const [checkoutInfo, setCheckoutInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,8 +33,8 @@ export default function MapView() {
           lat: p.lat || 49.8625,
           lng: p.lng || -119.4625,
           address: p.primary_address || "Address not provided",
-          products: p.inventory ? p.inventory.map((item) => item.name) : [],
-          fullProducts: p.inventory || [],
+          inventory_id: p.inventory_id,
+          products: (p.inventory || []).map((item) => item.name),
         }));
         setProducers(mappedProducers);
       } catch (error) {
@@ -42,6 +45,14 @@ export default function MapView() {
     };
     fetchProducers();
   }, []);
+
+  // Fetch stocks when a producer is selected
+  useEffect(() => {
+    if (!selectedProducer?.inventory_id) { setProducerStocks([]); return; }
+    inventoryAPI.getStocks(selectedProducer.inventory_id)
+      .then(data => setProducerStocks(data.stocks || []))
+      .catch(() => setProducerStocks([]));
+  }, [selectedProducer]);
 
   // Resizer logic
   const handleMouseDown = (e) => {
@@ -71,8 +82,8 @@ export default function MapView() {
     const searchLower = searchQuery.toLowerCase();
     return (
       p.name.toLowerCase().includes(searchLower) ||
-      (p.products &&
-        p.products.some((prod) => prod.toLowerCase().includes(searchLower)))
+      p.address.toLowerCase().includes(searchLower) ||
+      p.products.some((prod) => prod.toLowerCase().includes(searchLower))
     );
   });
 
@@ -178,9 +189,10 @@ export default function MapView() {
           >
             <ProducerDetail
               producer={selectedProducer}
+              stocks={producerStocks}
               onClose={() => setSelectedProducer(null)}
-              onOrder={(product, dist, mode) =>
-                setCheckoutInfo({ product, producer: dist, mode })
+              onOrder={(stock, dist, mode) =>
+                setCheckoutInfo({ stock, producer: dist, mode })
               }
             />
           </div>
@@ -209,9 +221,10 @@ export default function MapView() {
       {checkoutInfo && (
         <div style={{ position: "fixed", zIndex: 5001, inset: 0 }}>
           <Checkout
-            product={checkoutInfo.product}
+            stock={checkoutInfo.stock}
             producer={checkoutInfo.producer}
             mode={checkoutInfo.mode}
+            user={user}
             onClose={() => setCheckoutInfo(null)}
           />
         </div>

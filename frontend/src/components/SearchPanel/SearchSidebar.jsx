@@ -114,7 +114,7 @@ function SearchSidebar({ searchQuery, setSearchQuery, producers, onSelect }) {
                   marginTop: "10px",
                 }}
               >
-                {dist.products.join(", ")}
+                {dist.products.length > 0 ? dist.products.join(", ") : dist.address}
               </p>
             </div>
           ))

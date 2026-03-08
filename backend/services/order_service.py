@@ -2,10 +2,21 @@ from database import db
 from models.orders import InventoryOrder, OrderItem
 
 
-def get_all_orders():
-    orders = InventoryOrder.query.all()
+def get_all_orders(retailer_id=None):
+    q = InventoryOrder.query
+    if retailer_id is not None:
+        q = q.filter(InventoryOrder.retailer_id == retailer_id)
+    orders = q.order_by(InventoryOrder.order_date.desc()).all()
     return [
-        {"id": o.id, "consumer_id": o.consumer_id, "total_amount": float(o.total_amount), "status": o.status}
+        {
+            "id": o.id,
+            "consumer_id": o.consumer_id,
+            "retailer_id": o.retailer_id,
+            "total_amount": float(o.total_amount),
+            "status": o.status,
+            "order_date": o.order_date.isoformat() if o.order_date else None,
+            "item_count": len(o.order_items),
+        }
         for o in orders
     ]
 

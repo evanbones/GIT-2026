@@ -79,6 +79,7 @@ class Producer(User):
             )
 
         data["inventory"] = inventory_data
+        data["inventory_id"] = self.inventory.id if self.inventory else None
 
         return data
 
