@@ -7,7 +7,7 @@
 
 ## About The Project
 
-> TODO: write description of problem and our solution n' stuff yeah
+What is "Town Square"? We aim to capture value for small businesses by bridging the gap between clients and producers. Our web application empowers local businesses, non-profits or foundations to source products from local farms and distributors while sustainably supporting the local economy.
 
 ### Tech Stack
 
