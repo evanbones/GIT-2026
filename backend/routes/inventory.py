@@ -10,6 +10,9 @@ from services.inventory_service import (
     get_all_inventories,
     get_all_stocks,
     get_inventory,
+    get_inventory_items,
+    get_inventory_stocks,
+    get_item_stock_across_inventories,
     get_stock,
     update_stock,
 )
@@ -70,6 +73,30 @@ class StockList(Resource):
             return {"error": str(e)}, 400
         else:
             return {"message": "Stock created", "stock": result}, 201
+
+
+@inventory_ns.route("/<int:inventory_id>/stocks")
+class InventoryStocks(Resource):
+    def get(self, inventory_id):
+        """List all stocks in an inventory with item and price details."""
+        return {"stocks": get_inventory_stocks(inventory_id)}, 200
+
+
+@inventory_ns.route("/<int:inventory_id>/items")
+class InventoryItems(Resource):
+    def get(self, inventory_id):
+        """List all items in an inventory with total quantity and prices."""
+        return {"items": get_inventory_items(inventory_id)}, 200
+
+
+@inventory_ns.route("/items/<int:item_id>/stock")
+class ItemStock(Resource):
+    def get(self, item_id):
+        """Get an item with all its stock records across inventories."""
+        result = get_item_stock_across_inventories(item_id)
+        if result:
+            return result, 200
+        return {"error": "Item not found"}, 404
 
 
 @inventory_ns.route("/stocks/<int:stock_id>")
