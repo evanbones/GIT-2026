@@ -11,6 +11,7 @@ from services.b2b_service import (
     get_all_offers,
     get_group_buy,
     get_offer,
+    join_group_buy,
     update_group_buy,
     update_offer,
 )
@@ -21,8 +22,12 @@ b2b_ns = Namespace("b2b", description="Business to Business Group Buys and Offer
 @b2b_ns.route("/group-buys")
 class GroupBuyList(Resource):
     def get(self):
-        """List all group buy initiatives."""
-        return {"group_buys": get_all_group_buys()}, 200
+        """List group buy initiatives, optionally filtered by retailer_id, producer_id, item_id, or status."""
+        retailer_id = request.args.get("retailer_id", type=int)
+        producer_id = request.args.get("producer_id", type=int)
+        item_id = request.args.get("item_id", type=int)
+        status = request.args.get("status", type=str)
+        return {"group_buys": get_all_group_buys(retailer_id=retailer_id, item_id=item_id, status=status, producer_id=producer_id)}, 200
 
     def post(self):
         """Create a new group buy initiative."""
@@ -68,12 +73,27 @@ class GroupBuyDetail(Resource):
             return {"error": "Group buy not found"}, 404
 
 
+@b2b_ns.route("/group-buys/<int:gb_id>/join")
+class GroupBuyJoin(Resource):
+    def post(self, gb_id):
+        """Join an existing open group buy."""
+        data = request.get_json()
+        try:
+            result = join_group_buy(gb_id, data)
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+        if result:
+            return {"message": "Joined group buy", "group_buy": result}, 200
+        return {"error": "Group buy not found or not open"}, 404
+
+
 @b2b_ns.route("/offers")
 class OfferList(Resource):
     def get(self):
-        """List direct B2B stock offers, optionally filtered by producer_id."""
+        """List direct B2B stock offers, optionally filtered by producer_id or retailer_id."""
         producer_id = request.args.get("producer_id", type=int)
-        return {"offers": get_all_offers(producer_id=producer_id)}, 200
+        retailer_id = request.args.get("retailer_id", type=int)
+        return {"offers": get_all_offers(producer_id=producer_id, retailer_id=retailer_id)}, 200
 
     def post(self):
         """Submit a new offer from a retailer to a producer."""

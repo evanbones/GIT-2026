@@ -4,7 +4,7 @@ import Header from "../components/Header/Header.jsx";
 import SearchSidebar from "../components/SearchPanel/SearchSidebar.jsx";
 import ProducerDetail from "../components/SearchPanel/ProducerDetail.jsx";
 import Checkout from "../components/SearchPanel/Checkout.jsx";
-import { api, inventoryAPI } from "../utils/api.js";
+import { api, inventoryAPI, b2bAPI } from "../utils/api.js";
 import { useAuth } from "../contexts/useAuth.jsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -14,6 +14,7 @@ export default function MapView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProducer, setSelectedProducer] = useState(null);
   const [producerStocks, setProducerStocks] = useState([]);
+  const [openGroupBuys, setOpenGroupBuys] = useState([]);
   const [checkoutInfo, setCheckoutInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -44,11 +45,21 @@ export default function MapView() {
     fetchProducers();
   }, []);
 
+  const refreshProducerData = (inventoryId) => {
+    inventoryAPI.getStocks(inventoryId)
+      .then(data => {
+        const stocks = data.stocks || [];
+        setProducerStocks(stocks);
+        const itemIds = [...new Set(stocks.map(s => s.item.id))];
+        return Promise.all(itemIds.map(id => b2bAPI.getOpenGroupBuysForItem(id)));
+      })
+      .then(results => setOpenGroupBuys(results.flatMap(r => r.group_buys || [])))
+      .catch(() => {});
+  };
+
   useEffect(() => {
-    if (!selectedProducer?.inventory_id) { setProducerStocks([]); return; }
-    inventoryAPI.getStocks(selectedProducer.inventory_id)
-      .then(data => setProducerStocks(data.stocks || []))
-      .catch(() => setProducerStocks([]));
+    if (!selectedProducer?.inventory_id) { setProducerStocks([]); setOpenGroupBuys([]); return; }
+    refreshProducerData(selectedProducer.inventory_id);
   }, [selectedProducer]);
 
   const handleMouseDown = (e) => {
@@ -182,9 +193,10 @@ export default function MapView() {
             <ProducerDetail
               producer={selectedProducer}
               stocks={producerStocks}
+              openGroupBuys={openGroupBuys}
               onClose={() => setSelectedProducer(null)}
-              onOrder={(stock, dist, mode) =>
-                setCheckoutInfo({ stock, producer: dist, mode })
+              onOrder={(stock, dist, mode, groupBuy) =>
+                setCheckoutInfo({ stock, producer: dist, mode, groupBuy })
               }
             />
           </div>
@@ -214,8 +226,10 @@ export default function MapView() {
             stock={checkoutInfo.stock}
             producer={checkoutInfo.producer}
             mode={checkoutInfo.mode}
+            groupBuy={checkoutInfo.groupBuy}
             user={user}
             onClose={() => setCheckoutInfo(null)}
+            onSuccess={() => refreshProducerData(checkoutInfo.producer.inventory_id)}
           />
         </div>
       )}

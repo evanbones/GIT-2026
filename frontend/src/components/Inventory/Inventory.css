@@ -144,6 +144,19 @@
     border-left-color: var(--farm-brown);
 }
 
+.inventory-row-header {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #6b5744;
+    border-left-color: transparent;
+    background: transparent;
+    padding-bottom: 0.2em;
+}
+
+.inventory-row-header:hover {
+    border-left-color: transparent;
+}
+
 .row-name {
     font-weight: 600;
     font-size: 0.88rem;
@@ -428,7 +441,29 @@
     gap: 0.55em;
 }
 
-.stock-fields input[type="date"] {
+/* ── Labeled field wrapper ── */
+.field-labeled {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+}
+
+.field-labeled input,
+.field-labeled select,
+.field-labeled textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #7a5c3e;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.field-full {
     grid-column: 1 / -1;
 }
 

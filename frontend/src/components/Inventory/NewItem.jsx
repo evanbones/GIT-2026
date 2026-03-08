@@ -84,52 +84,73 @@ export default function NewItem({ onAdd, onDelete, inventoryId, producerId, stoc
             <form onSubmit={handleSubmit}>
 
                 <p className="form-section-label">Item</p>
-                <input
-                    type="text" placeholder="Item name *" required
-                    value={name} onChange={e => setName(e.target.value)}
-                    readOnly={isEdit}
-                    className={isEdit ? 'field-readonly' : ''}
-                />
-                <div className="stock-fields">
-                    <div className="select-wrapper">
-                        <select
-                            value={unitType} onChange={e => setUnitType(e.target.value)}
-                            disabled={isEdit}
-                        >
-                            {UNIT_TYPES.map(u => <option key={u} value={u}>{u}</option>)}
-                        </select>
-                        <ChevronDown size={14} className="select-chevron" />
-                    </div>
+                <div className="field-labeled">
+                    <label className="field-label">Item Name {!isEdit && '*'}</label>
                     <input
-                        type="text" placeholder="SKU (optional)"
-                        value={sku} onChange={e => setSku(e.target.value)}
+                        type="text" required
+                        value={name} onChange={e => setName(e.target.value)}
                         readOnly={isEdit}
                         className={isEdit ? 'field-readonly' : ''}
                     />
                 </div>
-                <textarea
-                    placeholder="Description (optional)" rows={2}
-                    value={description} onChange={e => setDescription(e.target.value)}
-                    readOnly={isEdit}
-                    className={isEdit ? 'field-readonly' : ''}
-                />
+                <div className="stock-fields">
+                    <div className="field-labeled">
+                        <label className="field-label">Unit Type</label>
+                        <div className="select-wrapper">
+                            <select
+                                value={unitType} onChange={e => setUnitType(e.target.value)}
+                                disabled={isEdit}
+                            >
+                                {UNIT_TYPES.map(u => <option key={u} value={u}>{u}</option>)}
+                            </select>
+                            <ChevronDown size={14} className="select-chevron" />
+                        </div>
+                    </div>
+                    <div className="field-labeled">
+                        <label className="field-label">SKU (optional)</label>
+                        <input
+                            type="text"
+                            value={sku} onChange={e => setSku(e.target.value)}
+                            readOnly={isEdit}
+                            className={isEdit ? 'field-readonly' : ''}
+                        />
+                    </div>
+                </div>
+                <div className="field-labeled">
+                    <label className="field-label">Description (optional)</label>
+                    <textarea
+                        rows={2}
+                        value={description} onChange={e => setDescription(e.target.value)}
+                        readOnly={isEdit}
+                        className={isEdit ? 'field-readonly' : ''}
+                    />
+                </div>
 
                 <hr className="form-divider" />
                 <p className="form-section-label">Stock</p>
 
                 <div className="stock-fields">
-                    <input
-                        type="number" placeholder="Quantity *" required min="0" step="any"
-                        value={quantity} onChange={e => setQuantity(e.target.value)}
-                    />
-                    <input
-                        type="text" placeholder="Batch no. (optional)"
-                        value={batchNumber} onChange={e => setBatchNumber(e.target.value)}
-                    />
-                    <input
-                        type="date"
-                        value={expirationDate} onChange={e => setExpirationDate(e.target.value)}
-                    />
+                    <div className="field-labeled">
+                        <label className="field-label">Quantity {!isEdit && '*'}</label>
+                        <input
+                            type="number" required min="0" step="any"
+                            value={quantity} onChange={e => setQuantity(e.target.value)}
+                        />
+                    </div>
+                    <div className="field-labeled">
+                        <label className="field-label">Batch No. (optional)</label>
+                        <input
+                            type="text"
+                            value={batchNumber} onChange={e => setBatchNumber(e.target.value)}
+                        />
+                    </div>
+                    <div className="field-labeled field-full">
+                        <label className="field-label">Expiry Date</label>
+                        <input
+                            type="date"
+                            value={expirationDate} onChange={e => setExpirationDate(e.target.value)}
+                        />
+                    </div>
                 </div>
 
                 <hr className="form-divider" />

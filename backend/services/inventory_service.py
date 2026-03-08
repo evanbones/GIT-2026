@@ -135,7 +135,10 @@ def update_stock(stock_id, data):
     stock = db.session.get(Stock, stock_id)
     if not stock:
         return None
-    stock.quantity = data.get("quantity", stock.quantity)
+    if "quantity_delta" in data:
+        stock.quantity = max(0, float(stock.quantity) + float(data["quantity_delta"]))
+    elif "quantity" in data:
+        stock.quantity = data["quantity"]
     stock.batch_number = data.get("batch_number", stock.batch_number)
     stock.expiration_date = data.get("expiration_date", stock.expiration_date)
     db.session.commit()

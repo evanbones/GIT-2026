@@ -17,6 +17,7 @@ export default function ProducerDashboard() {
     const [modalView, setModalView] = useState('inventory');
     const [editingStock, setEditingStock] = useState(null);
     const [offers, setOffers] = useState([]);
+    const [groupBuys, setGroupBuys] = useState([]);
 
     useEffect(() => {
         if (!user?.inventory_id) return;
@@ -28,14 +29,29 @@ export default function ProducerDashboard() {
 
     useEffect(() => {
         if (!user?.id) return;
-        b2bAPI.getOffers(user.id)
-            .then(data => setOffers(data.offers || []))
-            .catch(() => {});
+        b2bAPI.getOffers(user.id).then(data => setOffers(data.offers || [])).catch(() => {});
+        b2bAPI.getGroupBuysForProducer(user.id).then(data => setGroupBuys(data.group_buys || [])).catch(() => {});
     }, [user]);
 
     const handleOfferAction = (offerId, status) => {
         b2bAPI.updateOffer(offerId, status)
-            .then(() => setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status } : o)))
+            .then(() => {
+                setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status } : o));
+                if (status === 'rejected') {
+                    inventoryAPI.getStocks(user.inventory_id).then(data => setStocks(data.stocks || []));
+                }
+            })
+            .catch(() => {});
+    };
+
+    const handleGroupBuyAction = (gbId, status) => {
+        b2bAPI.updateGroupBuy(gbId, status)
+            .then(() => {
+                setGroupBuys(prev => prev.map(g => g.id === gbId ? { ...g, status } : g));
+                if (status === 'cancelled') {
+                    inventoryAPI.getStocks(user.inventory_id).then(data => setStocks(data.stocks || []));
+                }
+            })
             .catch(() => {});
     };
 
@@ -92,6 +108,14 @@ export default function ProducerDashboard() {
                         </div>
                     ) : (
                         <div className="stock-list">
+                            <div className="inventory-row inventory-row-header">
+                                <span>Name</span>
+                                <span>SKU</span>
+                                <span>Quantity</span>
+                                <span>Price</span>
+                                <span>Expiry</span>
+                                <span></span>
+                            </div>
                             {stocks.map(s => (
                                 <StockRow
                                     key={s.stock_id}
@@ -104,22 +128,24 @@ export default function ProducerDashboard() {
                 </div>
             )}
 
-            {offers.length > 0 && (
+            {(offers.length > 0 || groupBuys.length > 0) && (
                 <div className="dashboard-section">
                     <div className="section-header">
                         <h2>Incoming Offers</h2>
                     </div>
                     <div className="stock-list">
                         <div className="offer-row offer-row-header">
-                            <span>Retailer</span>
+                            <span>Type</span>
+                            <span>Retailer / Info</span>
                             <span>Item</span>
                             <span>Qty</span>
-                            <span>Offered Price</span>
+                            <span>Price</span>
                             <span>Status</span>
                             <span></span>
                         </div>
                         {offers.map(o => (
-                            <div key={o.id} className="offer-row">
+                            <div key={`offer-${o.id}`} className="offer-row">
+                                <span className="offer-type-tag offer-type-tag--direct">Direct</span>
                                 <span>{o.retailer_name || `Retailer #${o.retailer_id}`}</span>
                                 <span>{o.item_name || `Item #${o.item_id}`}</span>
                                 <span>{o.requested_quantity} {o.item_unit}</span>
@@ -131,6 +157,21 @@ export default function ProducerDashboard() {
                                             <button className="btn-accept" onClick={() => handleOfferAction(o.id, 'accepted')}>Accept</button>
                                             <button className="btn-reject" onClick={() => handleOfferAction(o.id, 'rejected')}>Reject</button>
                                         </>
+                                    )}
+                                </span>
+                            </div>
+                        ))}
+                        {groupBuys.map(g => (
+                            <div key={`gb-${g.id}`} className="offer-row">
+                                <span className="offer-type-tag offer-type-tag--group">Group</span>
+                                <span>{g.current_quantity}/{g.target_quantity} pledged · {g.deadline ? new Date(g.deadline).toLocaleDateString() : '—'}</span>
+                                <span>{g.item_name || `Item #${g.item_id}`}</span>
+                                <span>{g.current_quantity} {g.item_unit}</span>
+                                <span>—</span>
+                                <span className={`offer-status offer-status--${g.status}`}>{g.status}</span>
+                                <span className="offer-actions">
+                                    {(g.status === 'open' || g.status === 'closed') && (
+                                        <button className="btn-reject" onClick={() => handleGroupBuyAction(g.id, 'cancelled')}>Cancel</button>
                                     )}
                                 </span>
                             </div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
 
-const ProductItem = ({ stock, onOrder }) => {
+const ProductItem = ({ stock, onOrder, openGroupBuy }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const tiers = [...(stock.item.prices ?? [])].sort((a, b) => a.min_quantity - b.min_quantity);
   const basePrice = tiers[0]?.price_per_unit ?? 0;
@@ -44,13 +44,24 @@ const ProductItem = ({ stock, onOrder }) => {
             </table>
           )}
 
+          {openGroupBuy && (
+            <div style={{ marginBottom: "10px", padding: "8px 10px", background: "#edf7f0", border: "1px solid #a8d5b5", borderRadius: "5px", fontSize: "0.8rem", color: "#2d6a4f" }}>
+              <strong>Open group buy:</strong> {openGroupBuy.current_quantity}/{openGroupBuy.target_quantity} {openGroupBuy.item_unit} pledged · closes {new Date(openGroupBuy.deadline).toLocaleDateString()}
+            </div>
+          )}
           <div style={{ display: "flex", gap: "10px" }}>
             <button onClick={() => onOrder(stock, "DIRECT")} style={{ flex: 1, padding: "10px", borderRadius: "5px", border: "none", backgroundColor: "#4a7c59", color: "white", cursor: "pointer", fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
               Direct
             </button>
-            <button onClick={() => onOrder(stock, "GROUP")} style={{ flex: 1, padding: "10px", borderRadius: "5px", border: "2px solid #4a7c59", backgroundColor: "transparent", color: "#4a7c59", cursor: "pointer", fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
-              Group
-            </button>
+            {openGroupBuy ? (
+              <button onClick={() => onOrder(stock, "JOIN", openGroupBuy)} style={{ flex: 1, padding: "10px", borderRadius: "5px", border: "2px solid #4a7c59", backgroundColor: "transparent", color: "#4a7c59", cursor: "pointer", fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                Join Group
+              </button>
+            ) : (
+              <button onClick={() => onOrder(stock, "GROUP")} style={{ flex: 1, padding: "10px", borderRadius: "5px", border: "2px solid #4a7c59", backgroundColor: "transparent", color: "#4a7c59", cursor: "pointer", fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                Group
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -58,7 +69,7 @@ const ProductItem = ({ stock, onOrder }) => {
   );
 };
 
-function ProducerDetail({ producer, stocks = [], onClose, onOrder }) {
+function ProducerDetail({ producer, stocks = [], openGroupBuys = [], onClose, onOrder }) {
   const [isCloseHovered, setIsCloseHovered] = useState(false);
 
   return (
@@ -95,7 +106,8 @@ function ProducerDetail({ producer, stocks = [], onClose, onOrder }) {
           <ProductItem
             key={stock.stock_id}
             stock={stock}
-            onOrder={(s, mode) => onOrder(s, producer, mode)}
+            openGroupBuy={openGroupBuys.find(g => g.item_id === stock.item.id) ?? null}
+            onOrder={(s, mode, groupBuy) => onOrder(s, producer, mode, groupBuy)}
           />
         ))}
       </div>

@@ -49,8 +49,13 @@ export const b2bAPI = {
     createOffer: (data) => apiCall('/b2b/offers', { method: 'POST', body: JSON.stringify(data) }),
     createGroupBuy: (data) => apiCall('/b2b/group-buys', { method: 'POST', body: JSON.stringify(data) }),
     getOffers: (producerId) => apiCall(`/b2b/offers${producerId ? `?producer_id=${producerId}` : ''}`),
+    getMyOffers: (retailerId) => apiCall(`/b2b/offers${retailerId ? `?retailer_id=${retailerId}` : ''}`),
     updateOffer: (id, status) => apiCall(`/b2b/offers/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
-    getGroupBuys: () => apiCall('/b2b/group-buys'),
+    getGroupBuys: (retailerId) => apiCall(`/b2b/group-buys${retailerId ? `?retailer_id=${retailerId}` : ''}`),
+    getGroupBuysForProducer: (producerId) => apiCall(`/b2b/group-buys?producer_id=${producerId}`),
+    updateGroupBuy: (id, status) => apiCall(`/b2b/group-buys/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+    getOpenGroupBuysForItem: (itemId) => apiCall(`/b2b/group-buys?item_id=${itemId}&status=open`),
+    joinGroupBuy: (gbId, data) => apiCall(`/b2b/group-buys/${gbId}/join`, { method: 'POST', body: JSON.stringify(data) }),
 };
 
 export const usersAPI = {

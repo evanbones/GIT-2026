@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { b2bAPI } from "../../utils/api";
+import { b2bAPI, inventoryAPI } from "../../utils/api";
 
 const getUnitPrice = (tiers, qty) => {
   const sorted = [...tiers].sort((a, b) => a.min_quantity - b.min_quantity);
@@ -11,9 +11,14 @@ const getUnitPrice = (tiers, qty) => {
   return Number(price);
 };
 
-const Checkout = ({ stock, producer, mode, user, onClose }) => {
+const Checkout = ({ stock, producer, mode, groupBuy, user, onClose, onSuccess }) => {
   const [quantity, setQuantity] = useState(1);
   const [targetQuantity, setTargetQuantity] = useState(50);
+  const [deadline, setDeadline] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 30);
+    return d.toISOString().split('T')[0];
+  });
   const [confirmed, setConfirmed] = useState(false);
   const [step, setStep] = useState("FORM"); // FORM | SUBMITTING | SUCCESS | ERROR
   const [errorMsg, setErrorMsg] = useState(null);
@@ -21,6 +26,16 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
   const tiers = stock?.item?.prices ?? [];
   const unitPrice = getUnitPrice(tiers, quantity);
   const totalPrice = (unitPrice * quantity).toFixed(2);
+
+  const remaining = groupBuy ? groupBuy.target_quantity - groupBuy.current_quantity : Infinity;
+  const validationError = (() => {
+    if (quantity < 1) return "Quantity must be at least 1.";
+    if (quantity > (stock?.quantity ?? Infinity)) return `Only ${stock?.quantity} ${stock?.item?.unit_type} available in stock.`;
+    if (mode === "JOIN" && quantity > remaining) return `Only ${remaining} ${groupBuy.item_unit} remaining to fill this group buy.`;
+    if (mode === "GROUP" && targetQuantity > (stock?.quantity ?? Infinity)) return `Target cannot exceed available stock (${stock?.quantity} ${stock?.item?.unit_type}).`;
+    if (mode === "GROUP" && targetQuantity < 1) return "Target quantity must be at least 1.";
+    return null;
+  })();
 
   const handleConfirm = async () => {
     setStep("SUBMITTING");
@@ -35,14 +50,22 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
           requested_quantity: quantity,
           status: "pending",
         });
+      } else if (mode === "JOIN") {
+        await b2bAPI.joinGroupBuy(groupBuy.id, {
+          retailer_id: user?.id,
+          pledged_quantity: quantity,
+        });
       } else {
         await b2bAPI.createGroupBuy({
           initiator_retailer_id: user?.id,
           item_id: stock?.item?.id,
           target_quantity: targetQuantity,
+          deadline,
           status: "open",
         });
       }
+      await inventoryAPI.updateStock(stock.stock_id, { quantity_delta: -quantity });
+      onSuccess?.(mode);
       setStep("SUCCESS");
     } catch (err) {
       setErrorMsg(err.message);
@@ -55,12 +78,12 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
       <div style={overlayStyle}>
         <div style={modalStyle}>
           <h2 style={{ fontFamily: "var(--brand-serif)", color: "#3e2f1c", marginBottom: "15px" }}>
-            {mode === "DIRECT" ? "Offer Submitted" : "Group Buy Started"}
+            {mode === "DIRECT" ? "Offer Submitted" : mode === "JOIN" ? "Joined Group Buy" : "Group Buy Started"}
           </h2>
           <p style={{ color: "#78695a", lineHeight: "1.6" }}>
-            Your {mode === "DIRECT" ? "offer" : "group buy"} for <strong>{quantity} {stock?.item?.unit_type}</strong> of{" "}
-            <strong>{stock?.item?.name}</strong> from <strong>{producer?.name}</strong> has been received.
-            {mode === "GROUP" ? " Other retailers can now join the group to hit the target quantity." : ""}
+            {mode === "DIRECT" && <>Your offer for <strong>{quantity} {stock?.item?.unit_type}</strong> of <strong>{stock?.item?.name}</strong> from <strong>{producer?.name}</strong> has been received.</>}
+            {mode === "JOIN" && <>You've pledged <strong>{quantity} {stock?.item?.unit_type}</strong> of <strong>{stock?.item?.name}</strong> to the group buy.</>}
+            {mode === "GROUP" && <>Your group buy for <strong>{stock?.item?.name}</strong> is open. Other retailers can now join to hit the target quantity.</>}
           </p>
           <button onClick={onClose} style={primaryBtnStyle}>Return to Map</button>
         </div>
@@ -88,7 +111,7 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
       <div style={modalStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px", borderBottom: "2px solid #d4c4a8", paddingBottom: "15px" }}>
           <h3 style={{ fontFamily: "var(--brand-serif)", margin: 0, fontSize: "1.5rem", color: "#3e2f1c" }}>
-            {mode === "DIRECT" ? "Direct Purchase" : "Start Group Order"}
+            {mode === "DIRECT" ? "Direct Purchase" : mode === "JOIN" ? "Join Group Buy" : "Start Group Order"}
           </h3>
           <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: "#7a5c3e", fontSize: "1.1rem" }}>✕</button>
         </div>
@@ -111,30 +134,68 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
           </div>
         )}
 
+        {mode === "JOIN" && groupBuy && (
+          <div style={{ marginBottom: "20px", padding: "12px", background: "#edf7f0", border: "1px solid #a8d5b5", borderRadius: "5px", fontSize: "0.85rem", color: "#2d6a4f" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+              <span><strong>{groupBuy.current_quantity}</strong> / {groupBuy.target_quantity} {groupBuy.item_unit} pledged</span>
+              <span>Closes {new Date(groupBuy.deadline).toLocaleDateString()}</span>
+            </div>
+            <div style={{ height: "6px", background: "#c8e6c9", borderRadius: "999px", overflow: "hidden" }}>
+              <div style={{ height: "100%", background: "#4a7c59", borderRadius: "999px", width: `${Math.min(100, (groupBuy.current_quantity / groupBuy.target_quantity) * 100)}%` }} />
+            </div>
+          </div>
+        )}
+
         {mode === "GROUP" && (
-          <div style={{ marginBottom: "25px" }}>
-            <label style={labelStyle}>Collective Target Quantity</label>
-            <input
-              type="number" min="1"
-              value={targetQuantity}
-              onChange={(e) => setTargetQuantity(parseInt(e.target.value) || 1)}
-              style={inputStyle}
-            />
+          <div style={{ marginBottom: "25px", display: "flex", gap: "12px" }}>
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Target Quantity</label>
+              <div style={unitWrapStyle}>
+                <input
+                  type="number" min="1" max={stock?.quantity}
+                  value={targetQuantity}
+                  onChange={(e) => setTargetQuantity(Math.min(parseInt(e.target.value) || 1, stock?.quantity ?? Infinity))}
+                  style={{ ...inputStyle, paddingRight: "3.5rem" }}
+                />
+                <span style={unitLabelStyle}>{stock?.item?.unit_type}</span>
+              </div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={labelStyle}>Deadline</label>
+              <input
+                type="date"
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+                style={inputStyle}
+              />
+            </div>
           </div>
         )}
 
         <div style={{ marginBottom: "25px" }}>
-          <label style={labelStyle}>Your Quantity ({stock?.item?.unit_type})</label>
-          <input
-            type="number" min="1" max={stock?.quantity}
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-            style={inputStyle}
-          />
-          <p style={{ fontSize: "0.75rem", color: "#78695a", marginTop: "6px" }}>
-            Unit price at this quantity: <strong>${unitPrice.toFixed(2)}</strong>
-          </p>
+          <label style={labelStyle}>{mode === "JOIN" ? "Your Pledge" : "Your Quantity"}</label>
+          <div style={unitWrapStyle}>
+            <input
+              type="number" min="1"
+              max={mode === "JOIN"
+                ? Math.min(stock?.quantity ?? Infinity, groupBuy ? groupBuy.target_quantity - groupBuy.current_quantity : Infinity)
+                : stock?.quantity}
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+              style={{ ...inputStyle, paddingRight: "3.5rem" }}
+            />
+            <span style={unitLabelStyle}>{stock?.item?.unit_type}</span>
+          </div>
+          {mode !== "JOIN" && (
+            <p style={{ fontSize: "0.75rem", color: "#78695a", marginTop: "6px" }}>
+              Unit price at this quantity: <strong>${unitPrice.toFixed(2)}</strong>
+            </p>
+          )}
         </div>
+
+        {validationError && (
+          <p style={{ fontSize: "0.8rem", color: "#c1694f", marginBottom: "12px", fontWeight: 600 }}>{validationError}</p>
+        )}
 
         <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
           <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} style={{ margin: 0, flexShrink: 0 }} />
@@ -150,8 +211,8 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
           </div>
           <button
             onClick={handleConfirm}
-            disabled={!confirmed || step === "SUBMITTING"}
-            style={{ ...primaryBtnStyle, opacity: confirmed ? 1 : 0.5, cursor: confirmed ? "pointer" : "not-allowed" }}
+            disabled={!confirmed || !!validationError || step === "SUBMITTING"}
+            style={{ ...primaryBtnStyle, opacity: (!confirmed || !!validationError) ? 0.5 : 1, cursor: (!confirmed || !!validationError) ? "not-allowed" : "pointer" }}
           >
             {step === "SUBMITTING" ? "Submitting…" : "Confirm Order"}
           </button>
@@ -161,6 +222,8 @@ const Checkout = ({ stock, producer, mode, user, onClose }) => {
   );
 };
 
+const unitWrapStyle = { position: "relative", display: "flex", alignItems: "center" };
+const unitLabelStyle = { position: "absolute", right: "12px", fontSize: "0.85rem", color: "#7a5c3e", fontWeight: 600, pointerEvents: "none" };
 const overlayStyle = { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(62, 47, 28, 0.4)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 };
 const modalStyle = { background: "#fffdf7", padding: "40px", borderRadius: "8px", width: "450px", boxShadow: "0 6px 0 rgba(122, 92, 62, 0.1)", border: "2px solid #c4a882" };
 const labelStyle = { display: "block", marginBottom: "8px", fontWeight: 700, fontSize: "0.85rem", color: "#3e2f1c", textTransform: "uppercase", letterSpacing: "0.03em" };
