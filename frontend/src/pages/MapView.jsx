@@ -13,6 +13,8 @@ export default function MapView() {
   const [selectedProducer, setSelectedProducer] = useState(null);
   const [checkoutInfo, setCheckoutInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(350);
   const [isDragging, setIsDragging] = useState(false);
@@ -21,7 +23,6 @@ export default function MapView() {
     const fetchProducers = async () => {
       try {
         const response = await api.get("/users?type=producer");
-
         const mappedProducers = response.users.map((p) => ({
           id: p.id,
           name: p.company_name || "Unknown Company",
@@ -32,7 +33,6 @@ export default function MapView() {
           products: p.inventory ? p.inventory.map((item) => item.name) : [],
           fullProducts: p.inventory || [],
         }));
-
         setProducers(mappedProducers);
       } catch (error) {
         console.error("Failed to fetch producers:", error);
@@ -40,10 +40,10 @@ export default function MapView() {
         setIsLoading(false);
       }
     };
-
     fetchProducers();
   }, []);
 
+  // Resizer logic
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -53,23 +53,14 @@ export default function MapView() {
     const handleMouseMove = (e) => {
       if (!isDragging) return;
       const newWidth = e.clientX;
-      if (newWidth > 250 && newWidth < 600) {
-        setSidebarWidth(newWidth);
-      }
+      if (newWidth > 250 && newWidth < 600) setSidebarWidth(newWidth);
     };
-
-    const handleMouseUp = () => {
-      setIsDragging(false);
-    };
+    const handleMouseUp = () => setIsDragging(false);
 
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
-    } else {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
     }
-
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -91,139 +82,132 @@ export default function MapView() {
         height: "100vh",
         width: "100vw",
         display: "flex",
+        flexDirection: "column",
         overflow: "hidden",
         backgroundColor: "#faf6ef",
       }}
     >
+      <Header />
+
+      {/* Main Content Area */}
       <div
         style={{
-          width: isSidebarOpen ? `${sidebarWidth}px` : "0px",
-          height: "100%",
-          flexShrink: 0,
-          transition: isDragging ? "none" : "width 0.3s ease-in-out",
+          display: "flex",
+          flex: 1,
           overflow: "hidden",
           position: "relative",
-          zIndex: 6,
         }}
       >
-        <div style={{ width: `${sidebarWidth}px`, height: "100%" }}>
-          <SearchSidebar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            producers={filteredProducers}
-            onSelect={(dist) => setSelectedProducer(dist)}
-          />
-        </div>
-      </div>
-
-      <div
-        onMouseDown={isSidebarOpen ? handleMouseDown : undefined}
-        style={{
-          width: isSidebarOpen ? "6px" : "0px",
-          backgroundColor: isDragging ? "#4a7c59" : "transparent",
-          cursor: isSidebarOpen ? "col-resize" : "default",
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          transition: "background-color 0.2s ease",
-        }}
-      >
-        {isSidebarOpen && (
-          <div
-            style={{
-              width: "2px",
-              height: "100%",
-              backgroundColor: "#c4a882",
-              position: "absolute",
-              left: "2px",
-            }}
-          />
-        )}
-
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsSidebarOpen(!isSidebarOpen);
-          }}
-          onMouseDown={(e) => e.stopPropagation()}
-          style={{
-            position: "absolute",
-            left: isSidebarOpen ? "-16px" : "0px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            width: "32px",
-            height: "48px",
-            backgroundColor: "#fffdf7",
-            border: "2px solid #c4a882",
-            borderLeft: isSidebarOpen ? "2px solid #c4a882" : "none",
-            borderRadius: isSidebarOpen ? "8px 0 0 8px" : "0 8px 8px 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            zIndex: 2001,
-            boxShadow: isSidebarOpen
-              ? "-2px 0 5px rgba(0,0,0,0.1)"
-              : "2px 0 5px rgba(0,0,0,0.1)",
-            color: "#3e2f1c",
-            padding: 0,
-            outline: "none",
-          }}
-        >
-          {isSidebarOpen ? (
-            <ChevronLeft size={20} />
-          ) : (
-            <ChevronRight size={20} />
-          )}
-        </button>
-      </div>
-
-      {selectedProducer && (
-        <ProducerDetail
-          producer={selectedProducer}
-          onClose={() => setSelectedProducer(null)}
-          onOrder={(product, dist, mode) =>
-            setCheckoutInfo({ product, producer: dist, mode })
-          }
-        />
-      )}
-
-      <div style={{ flex: 1, position: "relative", height: "100%" }}>
+        {/* 1. Producers Panel (Search Sidebar) */}
         <div
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            zIndex: 1000,
-            pointerEvents: "none",
-            paddingTop: "10px",
+            width: isSidebarOpen ? `${sidebarWidth}px` : "0px",
+            height: "100%",
+            flexShrink: 0,
+            transition: isDragging ? "none" : "width 0.3s ease-in-out",
+            overflow: "hidden",
+            position: "relative",
+            zIndex: 6,
+            borderRight: isSidebarOpen ? "1px solid #e0d7c6" : "none",
           }}
         >
-          <div style={{ pointerEvents: "auto" }}>
-            <Header />
+          <div style={{ width: `${sidebarWidth}px`, height: "100%" }}>
+            <SearchSidebar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              producers={filteredProducers}
+              onSelect={(dist) => setSelectedProducer(dist)}
+            />
           </div>
         </div>
 
-        {isLoading ? (
-          <div
+        {/* 2. Drag Resizer & Toggle Button */}
+        <div
+          onMouseDown={isSidebarOpen ? handleMouseDown : undefined}
+          style={{
+            width: isSidebarOpen ? "4px" : "0px",
+            backgroundColor: isDragging ? "#4a7c59" : "transparent",
+            cursor: isSidebarOpen ? "col-resize" : "default",
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsSidebarOpen(!isSidebarOpen);
+            }}
+            onMouseDown={(e) => e.stopPropagation()}
             style={{
+              position: "absolute",
+              left: isSidebarOpen ? "-12px" : "10px",
+              top: "20px",
+              width: "24px",
+              height: "40px",
+              backgroundColor: "#fffdf7",
+              border: "1px solid #c4a882",
+              borderRadius: "6px",
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
-              height: "100%",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+              color: "#3e2f1c",
+              padding: 0,
             }}
           >
-            <h2>Loading Map Data...</h2>
+            {isSidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+          </button>
+        </div>
+
+        {/* 3. NEW: Producer Detail Panel (Slides in to the right of the resizer) */}
+        {selectedProducer && (
+          <div
+            style={{
+              width: "350px", // Fixed width for the detail view
+              height: "100%",
+              flexShrink: 0,
+              backgroundColor: "#fffdf7",
+              borderRight: "1px solid #e0d7c6",
+              zIndex: 5,
+              boxShadow: "4px 0 10px rgba(0,0,0,0.03)", // Subtle drop shadow
+              overflowY: "auto",
+            }}
+          >
+            <ProducerDetail
+              producer={selectedProducer}
+              onClose={() => setSelectedProducer(null)}
+              onOrder={(product, dist, mode) =>
+                setCheckoutInfo({ product, producer: dist, mode })
+              }
+            />
           </div>
-        ) : (
-          <Map pins={filteredProducers} selectedId={selectedProducer?.id} />
         )}
+
+        {/* 4. Map Container */}
+        <div style={{ flex: 1, position: "relative", height: "100%" }}>
+          {isLoading ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <h2>Loading Map Data...</h2>
+            </div>
+          ) : (
+            <Map pins={filteredProducers} selectedId={selectedProducer?.id} />
+          )}
+        </div>
       </div>
 
+      {/* Checkout Overlay (Stays on top of everything) */}
       {checkoutInfo && (
-        <div style={{ position: "relative", zIndex: 5001 }}>
-          {" "}
+        <div style={{ position: "fixed", zIndex: 5001, inset: 0 }}>
           <Checkout
             product={checkoutInfo.product}
             producer={checkoutInfo.producer}
