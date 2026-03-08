@@ -26,7 +26,17 @@ def create_app():
     app.config["SESSION_TYPE"] = "filesystem"
 
     Session(app)
-    CORS(app, origins=os.environ.get("CORS_ORIGINS", "http://localhost:5173"), supports_credentials=True)
+    cors_origins = os.environ.get("CORS_ORIGINS", "http://localhost:5173")
+    CORS(app, origins=cors_origins, supports_credentials=True)
+
+    @app.after_request
+    def add_cors_headers(response):
+        response.headers["Access-Control-Allow-Origin"] = cors_origins
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        return response
+
     init_oauth(app)
 
     app.register_blueprint(auth_bp)

@@ -31,3 +31,5 @@ class Stock(db.Model):
     batch_number = db.Column(db.String(100))
     expiration_date = db.Column(db.Date)
     origin_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    item = db.relationship("Item", backref="stocks")
