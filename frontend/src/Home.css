@@ -3,26 +3,26 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-}
-
-.hero-section {
-    width: 100%;
-    min-height: 85vh;
-    padding: 8rem 2rem 6rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    min-height: 100vh;
 
     background-image: linear-gradient(rgba(26, 26, 26, 0.2),
             rgba(26, 26, 26, 0.4)), url('/homepage.jpg');
-
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
     background-attachment: fixed;
+}
+
+.hero-section {
+    width: 100%;
+    min-height: 85vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .hero-content {
@@ -58,31 +58,6 @@
     line-height: 1.6;
 }
 
-/* --- Keyframes for the Entrance Animation --- */
-@keyframes fadeUp {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-title {
-    font-family: var(--brand-serif);
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    color: var(--text-color);
-    margin-bottom: 1rem;
-    line-height: 1.1;
-}
-
-.hero-subtitle {
-    font-family: var(--brand-sans);
-    font-size: 1.15rem;
-    color: #555555;
-    max-width: 600px;
-    margin-bottom: 2.5rem;
-    line-height: 1.6;
-}
-
 .hero-actions {
     display: flex;
     gap: 1rem;
@@ -90,6 +65,7 @@
     flex-wrap: wrap;
 }
 
+/* --- Button Base Styles --- */
 .btn-primary,
 .btn-secondary {
     font-family: var(--brand-sans);
@@ -132,4 +108,11 @@
     padding: 0 2rem 4rem;
     display: flex;
     justify-content: center;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

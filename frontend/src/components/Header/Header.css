@@ -1,16 +1,27 @@
 .navbar {
-    background-color: #ffffff;
-    border-bottom: 1px solid #eaeaea;
-    padding: 0.8rem 2rem;
+    background: rgba(249, 248, 244, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+    border-radius: 24px;
+    width: 85%;
+    max-width: 400px;
+    margin: 1rem auto 0;
+    padding: 0.1rem 2rem;
+
     position: sticky;
-    top: 0;
+    top: 1rem;
     z-index: 1000;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-family: var(--brand-sans);
 }
 
+/* --- Logo Container & Image Styling --- */
 .navbar-brand-container {
     display: flex;
     align-items: center;
@@ -23,11 +34,12 @@
 }
 
 .navbar-logo {
-    height: 2.2rem;
+    height: 5rem;
     width: auto;
     display: block;
 }
 
+/* --- Navigation Links --- */
 .links {
     display: flex;
     align-items: center;
@@ -45,5 +57,5 @@
 }
 
 .links a:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(26, 26, 26, 0.05);
 }

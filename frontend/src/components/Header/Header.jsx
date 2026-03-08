@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 
 function Header({ account, setAccount }) {
+  // Simulates logging out by resetting the account state
   const handleSignOut = (e) => {
     e.preventDefault();
     setAccount(false);
@@ -32,8 +33,8 @@ function Header({ account, setAccount }) {
     <header className="navbar">
       <Link to="/" className="navbar-brand-container">
         <img 
-          src="/logo.png" 
-          alt="Town Square Logo" 
+          src="/town-square-icon.png" 
+          alt="Town Square Icon" 
           className="navbar-logo" 
         />
       </Link>
