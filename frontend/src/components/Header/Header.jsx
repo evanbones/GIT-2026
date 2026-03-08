@@ -1,6 +1,5 @@
 import React from "react";
 import "./Header.css";
-import SearchBar from "../SearchBar/SearchBar.jsx";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 
 function Header({ account, setAccount }) {
