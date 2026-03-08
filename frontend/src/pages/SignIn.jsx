@@ -29,7 +29,9 @@ function SignIn({ account, setAccount }) {
             window.history.replaceState({}, document.title, newUrl);
             navigate('/onboard');
         } else if (authStatus === 'error') {
-            setError('Authentication failed. Please try again.');
+            setTimeout(() => {
+                setError('Authentication failed. Please try again.');
+            }, 0);
             params.delete('auth');
             const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
             window.history.replaceState({}, document.title, newUrl);
