@@ -16,8 +16,6 @@ export default function MapView() {
   const [producerStocks, setProducerStocks] = useState([]);
   const [checkoutInfo, setCheckoutInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Sidebar state
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(350);
   const [isDragging, setIsDragging] = useState(false);
@@ -46,7 +44,6 @@ export default function MapView() {
     fetchProducers();
   }, []);
 
-  // Fetch stocks when a producer is selected
   useEffect(() => {
     if (!selectedProducer?.inventory_id) { setProducerStocks([]); return; }
     inventoryAPI.getStocks(selectedProducer.inventory_id)
@@ -54,7 +51,6 @@ export default function MapView() {
       .catch(() => setProducerStocks([]));
   }, [selectedProducer]);
 
-  // Resizer logic
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -100,7 +96,6 @@ export default function MapView() {
     >
       <Header />
 
-      {/* Main Content Area */}
       <div
         style={{
           display: "flex",
@@ -109,7 +104,6 @@ export default function MapView() {
           position: "relative",
         }}
       >
-        {/* 1. Producers Panel (Search Sidebar) */}
         <div
           style={{
             width: isSidebarOpen ? `${sidebarWidth}px` : "0px",
@@ -132,7 +126,6 @@ export default function MapView() {
           </div>
         </div>
 
-        {/* 2. Drag Resizer & Toggle Button */}
         <div
           onMouseDown={isSidebarOpen ? handleMouseDown : undefined}
           style={{
@@ -173,17 +166,16 @@ export default function MapView() {
           </button>
         </div>
 
-        {/* 3. NEW: Producer Detail Panel (Slides in to the right of the resizer) */}
         {selectedProducer && (
           <div
             style={{
-              width: "350px", // Fixed width for the detail view
+              width: "350px",
               height: "100%",
               flexShrink: 0,
               backgroundColor: "#fffdf7",
               borderRight: "1px solid #e0d7c6",
               zIndex: 5,
-              boxShadow: "4px 0 10px rgba(0,0,0,0.03)", // Subtle drop shadow
+              boxShadow: "4px 0 10px rgba(0,0,0,0.03)",
               overflowY: "auto",
             }}
           >
@@ -198,7 +190,6 @@ export default function MapView() {
           </div>
         )}
 
-        {/* 4. Map Container */}
         <div style={{ flex: 1, position: "relative", height: "100%" }}>
           {isLoading ? (
             <div
@@ -217,7 +208,6 @@ export default function MapView() {
         </div>
       </div>
 
-      {/* Checkout Overlay (Stays on top of everything) */}
       {checkoutInfo && (
         <div style={{ position: "fixed", zIndex: 5001, inset: 0 }}>
           <Checkout
