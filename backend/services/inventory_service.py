@@ -5,21 +5,21 @@ from models.inventory import Inventory, Stock
 
 def get_all_inventories():
     inventories = Inventory.query.all()
-    return [{"id": i.id, "retailer_id": i.retailer_id, "last_updated": str(i.last_updated)} for i in inventories]
+    return [{"id": i.id, "producer_id": i.producer_id, "last_updated": str(i.last_updated)} for i in inventories]
 
 
 def get_inventory(inventory_id):
     inv = db.session.get(Inventory, inventory_id)
     if not inv:
         return None
-    return {"id": inv.id, "retailer_id": inv.retailer_id, "last_updated": str(inv.last_updated)}
+    return {"id": inv.id, "producer_id": inv.producer_id, "last_updated": str(inv.last_updated)}
 
 
 def create_inventory(data):
-    inv = Inventory(retailer_id=data.get("retailer_id"))
+    inv = Inventory(producer_id=data.get("producer_id"))
     db.session.add(inv)
     db.session.commit()
-    return {"id": inv.id, "retailer_id": inv.retailer_id}
+    return {"id": inv.id, "producer_id": inv.producer_id}
 
 
 def delete_inventory(inventory_id):
@@ -153,7 +153,7 @@ def get_item_stock_across_inventories(item_id):
                 "batch_number": s.batch_number,
                 "expiration_date": str(s.expiration_date) if s.expiration_date else None,
                 "inventory_id": inv.id,
-                "retailer_id": inv.retailer_id,
+                "producer_id": inv.producer_id,
             }
             for s, inv in stocks
         ],

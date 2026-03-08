@@ -5,13 +5,15 @@ from database import db
 
 class Inventory(db.Model):
     """
-    Represents a retailer's overall inventory.
+    Represents a producer's overall inventory.
     """
 
     __tablename__ = "inventories"
 
     id = db.Column(db.Integer, primary_key=True)
-    retailer_id = db.Column(db.Integer, db.ForeignKey("retailers.id"), nullable=False, unique=True)
+    producer_id = db.Column(
+        db.Integer, db.ForeignKey("producers.id"), nullable=False, unique=True
+    )
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
     stocks = db.relationship("Stock", backref="inventory", cascade="all, delete-orphan")
