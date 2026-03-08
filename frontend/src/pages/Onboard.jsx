@@ -25,26 +25,6 @@ export default function Onboard({ account, setAccount }) {
     }
 
     return (
-<<<<<<< HEAD
-        // Root container for full height, background image, centering
-        <div className="onboard-page hero-framework"> 
-            
-            {/* Main content container for hero sections/elements */}
-            <div className="hero-content">
-
-                {/* Optional: Simple hero header content can go here */}
-                {/* <h1>Welcome to Graeme's!</h1> */}
-                {/* <p>Set up your profile to connect.</p> */}
-
-                {/* The existing onboarding form */}
-                <form className="onboard-form" onSubmit={submitBasicOnboard}>
-                    <h2>Set Up Your Business</h2>
-                    <input type="text" placeholder="Business Name"
-                        value={name} onChange={(e) => setName(e.target.value)} />
-
-                    <input type="address" placeholder="Business Address"
-                        value={address} onChange={(e) => setAddress(e.target.value)} />
-=======
         <div className="onboard-page">
             <Header account={account} setAccount={setAccount} />
             <form className="onboard-form" onSubmit={submitBasicOnboard}>
@@ -100,7 +80,6 @@ export default function Onboard({ account, setAccount }) {
                     value={link} 
                     onChange={(e) => setLink(e.target.value)} 
                 />
->>>>>>> 3bc7a03604c3f0bf3b86754b8a581e3013e94120
 
                     <div className="onboard-radio-group">
                         <label>
@@ -123,12 +102,5 @@ export default function Onboard({ account, setAccount }) {
                     <button type="submit">Submit</button>
                 </form>
             </div>
-        </div>
-<<<<<<< HEAD
-    )
-
-}
-=======
     );
 }
->>>>>>> 3bc7a03604c3f0bf3b86754b8a581e3013e94120
