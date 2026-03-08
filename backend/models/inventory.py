@@ -11,9 +11,7 @@ class Inventory(db.Model):
     __tablename__ = "inventories"
 
     id = db.Column(db.Integer, primary_key=True)
-    producer_id = db.Column(
-        db.Integer, db.ForeignKey("producers.id"), nullable=False, unique=True
-    )
+    producer_id = db.Column(db.Integer, db.ForeignKey("producers.id"), nullable=False, unique=True)
     last_updated = db.Column(db.DateTime, default=datetime.utcnow)
 
     stocks = db.relationship("Stock", backref="inventory", cascade="all, delete-orphan")

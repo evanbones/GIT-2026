@@ -100,10 +100,7 @@ def _serialize_item_with_prices(item):
 
 def get_inventory_stocks(inventory_id):
     stocks = (
-        db.session.query(Stock)
-        .filter(Stock.inventory_id == inventory_id)
-        .join(Item, Stock.item_id == Item.id)
-        .all()
+        db.session.query(Stock).filter(Stock.inventory_id == inventory_id).join(Item, Stock.item_id == Item.id).all()
     )
     return [
         {
