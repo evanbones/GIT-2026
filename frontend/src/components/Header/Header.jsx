@@ -17,7 +17,8 @@ function Header({ account, setAccount }) {
     links = (
       <div className="links">
         <a href="/map">Map</a>
-        <a href="/sign-in">Log In</a>
+        <a href="/sign-in">Sign In</a>
+        <a href="/sign-up">Sign up</a>
       </div>
     )
   }
