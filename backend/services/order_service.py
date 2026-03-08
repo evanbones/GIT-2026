@@ -3,13 +3,6 @@ from models.orders import InventoryOrder, OrderItem
 
 
 def get_all_orders():
-    """
-    Retrieves all inventory orders.
-
-    Returns:
-        list[dict]: A list of all orders.
-
-    """
     orders = InventoryOrder.query.all()
     return [
         {"id": o.id, "consumer_id": o.consumer_id, "total_amount": float(o.total_amount), "status": o.status}
@@ -18,18 +11,6 @@ def get_all_orders():
 
 
 def create_order(data):
-    """
-    Creates a new InventoryOrder along with its associated OrderItems.
-
-    Args:
-        data (dict): The payload containing order data and a list of items.
-                     Expected format: {"consumer_id": int, "retailer_id": int,
-                     "total_amount": float, "items": [{"stock_id": int, "quantity": float, "unit_price": float}]}
-
-    Returns:
-        dict: The resulting order summary including generated ID.
-
-    """
     order = InventoryOrder(
         consumer_id=data.get("consumer_id"),
         retailer_id=data.get("retailer_id"),
@@ -51,3 +32,34 @@ def create_order(data):
 
     db.session.commit()
     return {"id": order.id, "status": order.status, "item_count": len(items_data)}
+
+
+def get_order(order_id):
+    order = db.session.get(InventoryOrder, order_id)
+    if not order:
+        return None
+    return {
+        "id": order.id,
+        "consumer_id": order.consumer_id,
+        "total_amount": float(order.total_amount),
+        "status": order.status,
+    }
+
+
+def update_order(order_id, data):
+    order = db.session.get(InventoryOrder, order_id)
+    if not order:
+        return None
+
+    order.status = data.get("status", order.status)
+    db.session.commit()
+    return {"id": order.id, "status": order.status}
+
+
+def delete_order(order_id):
+    order = db.session.get(InventoryOrder, order_id)
+    if not order:
+        return False
+    db.session.delete(order)
+    db.session.commit()
+    return True

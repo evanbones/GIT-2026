@@ -25,7 +25,7 @@ def get_user(user_id):
         dict: The user's data as a dictionary, or None if not found.
 
     """
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     return user.to_dict() if user else None
 
 
@@ -76,3 +76,28 @@ def create_user(data):
     db.session.add(user)
     db.session.commit()
     return user.to_dict()
+
+
+def update_user(user_id, data):
+    user = db.session.get(User, user_id)
+    if not user:
+        return None
+
+    user.email = data.get("email", user.email)
+
+    if user.user_type in {"producer", "retailer"}:
+        user.company_name = data.get("company_name", user.company_name)
+    elif user.user_type == "consumer":
+        user.first_name = data.get("first_name", user.first_name)
+
+    db.session.commit()
+    return user.to_dict()
+
+
+def delete_user(user_id):
+    user = db.session.get(User, user_id)
+    if not user:
+        return False
+    db.session.delete(user)
+    db.session.commit()
+    return True
