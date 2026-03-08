@@ -1,0 +1,202 @@
+/* ── Modal overlay ── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 16px;
+    padding: 2em;
+    width: 100%;
+    max-width: 400px;
+    font-family: var(--brand-sans);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h2 {
+    margin: 0 0 1em 0;
+    font-family: var(--brand-serif);
+    font-size: 1.5rem;
+    color: #1a1a1a;
+}
+
+
+.inventory-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid black;
+    border-radius: 16px;
+    background-color: white;
+    padding: 2em;
+    font-family: var(--brand-sans);
+    gap: 1.2em;
+    width: 100%;
+    max-width: 480px;
+}
+
+.inventory-wrapper h2 {
+    margin: 0 0 0.2em 0;
+    font-family: var(--brand-serif);
+    font-size: 1.5rem;
+    color: #1a1a1a;
+}
+
+/* ── Add‑item header row ── */
+.inventory-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    width: 100%;
+}
+
+.inventory-header p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.inventory-header button {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.inventory-header button:hover {
+    background-color: #333;
+}
+
+/* ── Item cards ── */
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    width: 100%;
+}
+
+.inventory-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.2em 1em;
+    align-items: center;
+    padding: 0.8em 1em;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: left;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.inventory-card:hover {
+    border-color: #1a1a1a;
+}
+
+.inventory-card .item-name {
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+    justify-self: start;
+}
+
+.inventory-card .item-stats {
+    display: flex;
+    gap: 0.8em;
+    align-items: center;
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    justify-self: end;
+}
+
+.inventory-card .item-description {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 0.85rem;
+    color: #777;
+    text-align: left;
+}
+
+/* ── NewItem form ── */
+.new-item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    width: 100%;
+}
+
+.new-item-form input[type="text"],
+.new-item-form textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5em 0.8em;
+    font-size: 0.95rem;
+    font-family: var(--brand-sans);
+    color: #1a1a1a;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+    resize: vertical;
+}
+
+.new-item-form input[type="text"]:focus,
+.new-item-form textarea:focus {
+    border-color: #1a1a1a;
+}
+
+.new-item-form button[type="submit"] {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 0.5em 1.4em;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: var(--brand-sans);
+    transition: background-color 0.2s ease-in-out;
+    align-self: flex-end;
+}
+
+.new-item-form button[type="submit"]:hover {
+    background-color: #333;
+}
+
+/* ── Continue button ── */
+.continue-btn {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 0.65em 1.6em;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: var(--brand-sans);
+    width: 100%;
+    transition: background-color 0.2s ease-in-out;
+    margin-top: 0.4em;
+}
+
+.continue-btn:hover {
+    background-color: #333;
+}
