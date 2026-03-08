@@ -1,0 +1,132 @@
+-- Base user table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_type VARCHAR(50) NOT NULL,
+    description TEXT,
+    profile_photo BYTEA
+);
+
+-- Subtypes
+CREATE TABLE producers (
+    id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    company_name VARCHAR(255) NOT NULL,
+    primary_address TEXT NOT NULL,
+    description TEXT,
+    images BYTEA
+);
+
+CREATE TABLE retailers (
+    id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    company_name VARCHAR(255) NOT NULL,
+    store_address TEXT NOT NULL,
+    images BYTEA
+);
+
+CREATE TABLE consumers (
+    id INT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255) NOT NULL,
+    shipping_address TEXT NOT NULL
+);
+
+-- Catalog and Pricing
+CREATE TABLE items (
+    id SERIAL PRIMARY KEY,
+    producer_id INT NOT NULL REFERENCES producers(id),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    sku VARCHAR(100) UNIQUE,
+    unit_type VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE prices (
+    id SERIAL PRIMARY KEY,
+    item_id INT NOT NULL REFERENCES items(id) ON DELETE CASCADE,
+    min_quantity INT NOT NULL,
+    max_quantity INT, -- Nullable for highest tier
+    price_per_unit NUMERIC(10,2) NOT NULL
+);
+
+-- Inventory and Stock
+CREATE TABLE inventories (
+    id SERIAL PRIMARY KEY,
+    retailer_id INT NOT NULL UNIQUE REFERENCES retailers(id),
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE stocks (
+    id SERIAL PRIMARY KEY,
+    inventory_id INT REFERENCES inventories(id), -- Nullable as per UML
+    item_id INT NOT NULL REFERENCES items(id),
+    quantity NUMERIC(10,3) NOT NULL,
+    batch_number VARCHAR(100),
+    expiration_date DATE,
+    origin_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Requests
+CREATE TABLE stock_request_lists (
+    id SERIAL PRIMARY KEY,
+    producer_id INT NOT NULL REFERENCES producers(id),
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE stock_requests (
+    id SERIAL PRIMARY KEY,
+    list_id INT NOT NULL REFERENCES stock_request_lists(id) ON DELETE CASCADE,
+    retailer_id INT NOT NULL REFERENCES retailers(id),
+    item_id INT NOT NULL REFERENCES items(id),
+    quantity_requested NUMERIC(10,3) NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
+
+-- B2B
+CREATE TABLE group_buys (
+    id SERIAL PRIMARY KEY,
+    initiator_retailer_id INT NOT NULL REFERENCES retailers(id),
+    item_id INT NOT NULL REFERENCES items(id),
+    target_quantity NUMERIC(10,3) NOT NULL,
+    current_quantity NUMERIC(10,3) DEFAULT 0,
+    deadline TIMESTAMP NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE group_buy_participants (
+    group_buy_id INT NOT NULL REFERENCES group_buys(id) ON DELETE CASCADE,
+    retailer_id INT NOT NULL REFERENCES retailers(id),
+    pledged_quantity NUMERIC(10,3) NOT NULL,
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (group_buy_id, retailer_id)
+);
+
+CREATE TABLE buy_stock_offers (
+    id SERIAL PRIMARY KEY,
+    retailer_id INT NOT NULL REFERENCES retailers(id),
+    producer_id INT NOT NULL REFERENCES producers(id),
+    item_id INT NOT NULL REFERENCES items(id),
+    offered_price NUMERIC(10,2) NOT NULL,
+    requested_quantity NUMERIC(10,3) NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
+
+-- B2C
+CREATE TABLE inventory_orders (
+    id SERIAL PRIMARY KEY,
+    consumer_id INT NOT NULL REFERENCES consumers(id),
+    retailer_id INT NOT NULL REFERENCES retailers(id),
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    total_amount NUMERIC(10, 2) NOT NULL,
+    status VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE order_items (
+    id SERIAL PRIMARY KEY,
+    order_id INT NOT NULL REFERENCES inventory_orders(id) ON DELETE CASCADE,
+    stock_id INT NOT NULL REFERENCES stocks(id),
+    quantity NUMERIC(10, 2) NOT NULL,
+    unit_price NUMERIC(10, 2) NOT NULL
+);
