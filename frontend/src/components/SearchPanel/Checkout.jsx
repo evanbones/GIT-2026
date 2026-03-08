@@ -4,8 +4,9 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [targetQuantity, setTargetQuantity] = useState(50);
   const [step, setStep] = useState("FORM");
+  const [confirmed, setConfirmed] = useState(false);
 
-  {/* Hardocoded quantities for now*/}
+  {/* Hardocoded quantities for now*/ }
   const getUnitPrice = (qty) => {
     if (qty >= 13) return Math.floor(product.basePrice * 0.8);
     if (qty >= 6) return Math.floor(product.basePrice * 0.9);
@@ -15,7 +16,7 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
   const currentUnitPrice = getUnitPrice(quantity);
   const totalPrice = currentUnitPrice * quantity;
 
-  {/* Success message */}
+  {/* Success message */ }
   if (step === "SUCCESS") {
     return (
       <div style={overlayStyle}>
@@ -31,7 +32,7 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
     );
   }
 
-  {/* changes window depending on if its a direct purchase or a group order */}
+  {/* changes window depending on if its a direct purchase or a group order */ }
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
@@ -73,6 +74,11 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
           />
         </div>
 
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
+          <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} style={{ margin: 0, flexShrink: 0 }} />
+          <label style={{ fontWeight: 700, fontSize: "0.65rem", textAlign: "left", color: "#3e2f1c", textTransform: "uppercase", letterSpacing: "0.03em" }}>I confirm that I meet all applicable legal and platform requirements to place this order.</label>
+        </div>
+
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", borderTop: "2px solid #d4c4a8", paddingTop: "20px" }}>
           <div>
             <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700 }}>Estimated Total</span>
@@ -80,13 +86,14 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
           </div>
           <button
             onClick={() => setStep("SUCCESS")}
-            style={primaryBtnStyle}
+            disabled={!confirmed}
+            style={{ ...primaryBtnStyle, ...(confirmed ? {} : { opacity: 0.5, cursor: "not-allowed" }) }}
           >
             Confirm Order
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
