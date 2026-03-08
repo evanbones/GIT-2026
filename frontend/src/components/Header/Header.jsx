@@ -1,6 +1,6 @@
 import React from "react";
 import "./Header.css";
-import { useAuth } from "../../contexts/AuthContext.jsx";
+import { useAuth } from "../../contexts/useAuth.jsx";
 
 function Header({ account, setAccount }) {
   const { isAuthenticated, signOut, user } = useAuth();
@@ -21,7 +21,8 @@ function Header({ account, setAccount }) {
     links = (
       <div className="links">
         <a href="/map">Map</a>
-        <a href="/sign-in">Log In</a>
+        <a href="/sign-up">Sign up</a>
+        <a href="/sign-in">Sign In</a>
       </div>
     )
   }
