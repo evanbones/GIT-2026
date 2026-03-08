@@ -5,13 +5,14 @@ import Header from "../components/Header/Header.jsx"
 
 import './SignIn.css';
 
-function SignIn({ account, setAccount }) {
+function SignIn() {
 
     const navigate = useNavigate();
     const { login: googleLogin } = useAuth();
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { isAuthenticated } = useAuth();
 
 
     const login = (e) => {
@@ -19,7 +20,6 @@ function SignIn({ account, setAccount }) {
         //check database
         const success = true;
         if (success) {
-            setAccount(true);
             setError("");
             navigate("/dashboard");
         } else {
@@ -29,7 +29,7 @@ function SignIn({ account, setAccount }) {
 
     return (
         <div className="signin-page">
-            <Header account={account} setAccount={setAccount} />
+            <Header />
             <form className="signin-form" onSubmit={login}>
                 <h2>Sign In</h2>
                 <input type="text" placeholder="Email" value={email}

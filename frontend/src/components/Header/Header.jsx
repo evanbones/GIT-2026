@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../../contexts/useAuth.jsx";
 
-function Header({ account, setAccount }) {
+function Header() {
   const { isAuthenticated, signOut, user } = useAuth();
   let links;
 
-  if (account) {
+  if (isAuthenticated) {
     links = (
       <div className="links">
         <a href="/map">Browse</a>
@@ -31,10 +31,10 @@ function Header({ account, setAccount }) {
   return (
     <header className="navbar">
       <Link to="/" className="navbar-brand-container">
-        <img 
-          src="/town-square-icon.png" 
-          alt="Town Square Icon" 
-          className="navbar-logo" 
+        <img
+          src="/town-square-icon.png"
+          alt="Town Square Icon"
+          className="navbar-logo"
         />
       </Link>
       {links}

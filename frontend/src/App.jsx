@@ -13,7 +13,6 @@ import Clippy from "./components/Clippy/Clippy.jsx";
 import AuthHandler from "./components/AuthHandler.jsx";
 
 function App() {
-  const [account, setAccount] = useState(false);
 
   return (
     <>
@@ -21,17 +20,17 @@ function App() {
         <AuthProvider>
           <AuthHandler />
           <Routes>
-            <Route path="/" element={<Home account={account} setAccount={setAccount} />} />
+            <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={
               <PrivateRoute>
-                <Dashboard account={account} setAccount={setAccount} />
+                <Dashboard />
               </PrivateRoute>
             } />
-            <Route path="/sign-up" element={<SignUp setAccount={setAccount} />} />
-            <Route path="/sign-in" element={<SignIn setAccount={setAccount} />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/sign-in" element={<SignIn />} />
             <Route path="/onboard" element={
               <PrivateRoute>
-                <Onboard account={account} />
+                <Onboard />
               </PrivateRoute>
             } />
             <Route path="/map" element={<MapView />} />
