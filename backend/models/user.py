@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import ClassVar
 
 from database import db
+from models.catalog import Item
 
 
 class User(db.Model):
@@ -65,6 +66,19 @@ class Producer(User):
         data["primary_address"] = self.primary_address
         data["lat"] = self.lat
         data["lng"] = self.lng
+
+        items = Item.query.filter_by(producer_id=self.id).all()
+
+        inventory_data = []
+        for item in items:
+            base_price = min([float(p.price_per_unit) for p in item.prices]) if item.prices else 0
+
+            inventory_data.append(
+                {"id": item.id, "name": item.name, "description": item.description, "basePrice": base_price}
+            )
+
+        data["inventory"] = inventory_data
+
         return data
 
 
