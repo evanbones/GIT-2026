@@ -22,7 +22,7 @@ function Header() {
     links = (
       <div className="links">
         <Link to="/map">Map</Link>
-        <Link to="/sign-in">Sign In</Link>
+        <Link to="/login">Login</Link>
         <Link to="/sign-up">Sign Up</Link>
       </div>
     );

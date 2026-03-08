@@ -6,7 +6,7 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import Home from "./Home.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import SignUp from "./pages/SignUp.jsx";
-import SignIn from "./pages/SignIn.jsx";
+import Login from "./pages/Login.jsx";
 import MapView from "./pages/MapView.jsx";
 import Onboard from "./pages/Onboard.jsx"
 import Clippy from "./components/Clippy/Clippy.jsx";
@@ -27,7 +27,7 @@ function App() {
               </PrivateRoute>
             } />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/onboard" element={
               <PrivateRoute>
                 <Onboard />

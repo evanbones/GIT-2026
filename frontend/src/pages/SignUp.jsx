@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from '../contexts/useAuth';
 import Header from "../components/Header/Header.jsx"
 
-import './SignIn.css';
+import './Login.css';
 
-function SignIn() {
+function Login() {
 
     const navigate = useNavigate();
     const { login: googleLogin } = useAuth();
@@ -28,17 +28,17 @@ function SignIn() {
     }
 
     return (
-        <div className="signin-page">
+        <div className="login-page">
             <Header />
-            <form className="signin-form" onSubmit={login}>
+            <form className="login-form" onSubmit={login}>
                 <h2>Sign Up</h2>
                 <input type="text" placeholder="Email" value={email}
                     onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Password" value={password}
                     onChange={(e) => setPassword(e.target.value)} />
-                <div className="signin-actions">
+                <div className="login-actions">
                     <button type="submit">Sign Up</button>
-                    <button type="button" onClick={googleLogin} className="btn-google-signin">
+                    <button type="button" onClick={googleLogin} className="btn-google-login">
                         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
@@ -48,10 +48,10 @@ function SignIn() {
                         Sign up with Google
                     </button>
                 </div>
-                {error && <p className="signin-error">{error}</p>}
+                {error && <p className="login-error">{error}</p>}
             </form>
         </div>
     )
 }
 
-export default SignIn
+export default Login

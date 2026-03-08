@@ -1,10 +1,10 @@
-.signin-page {
+.login-page {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-.signin-form {
+.login-form {
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -20,7 +20,7 @@
     box-shadow: 0 3px 0 var(--farm-border-light);
 }
 
-.signin-form h2 {
+.login-form h2 {
     margin: 0 0 0.4em 0;
     font-family: var(--brand-serif);
     font-size: 1.5rem;
@@ -30,8 +30,8 @@
     width: 100%;
 }
 
-.signin-form input[type="text"],
-.signin-form input[type="password"] {
+.login-form input[type="text"],
+.login-form input[type="password"] {
     width: 100%;
     border: var(--border-thick) solid var(--farm-border-light);
     border-radius: var(--radius-sm);
@@ -45,12 +45,12 @@
     background-color: var(--farm-card);
 }
 
-.signin-form input[type="text"]:focus,
-.signin-form input[type="password"]:focus {
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
     border-color: var(--farm-green);
 }
 
-.signin-form button {
+.login-form button {
     background-color: var(--farm-green);
     color: white;
     border: none;
@@ -61,31 +61,36 @@
     font-weight: 600;
     font-family: var(--brand-sans);
     transition: background-color 0.2s ease-in-out;
-    align-self: flex-end;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    width: 100%;
+    max-width: 280px;
 }
 
-.signin-form button:hover {
+.login-form button:hover {
     background-color: var(--farm-green-hover);
 }
-
-.signin-actions {
+.login-actions {
     display: flex;
+    flex-direction: column;
     gap: 0.75em;
     align-self: stretch;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5em;
 }
 
-.signin-actions button[type="submit"] {
+.login-actions button[type="submit"] {
     align-self: unset;
 }
 
-.btn-google-signin {
+.btn-google-login {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.6em;
-    flex: 1;
+    width: 100%;
+    max-width: 280px;
     background-color: white;
     color: #1a1a1a;
     border: 1px solid #ccc;
@@ -98,12 +103,12 @@
     transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 
-.btn-google-signin:hover {
+.btn-google-login:hover {
     border-color: #1a1a1a;
     background-color: #f5f5f5;
 }
 
-.signin-error {
+.login-error {
     color: #c1694f;
     font-size: 0.9rem;
     margin: 0;
