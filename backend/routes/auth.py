@@ -1,9 +1,12 @@
+import logging
 import os
 
 from flask import Blueprint, jsonify, redirect, session, url_for
 
 from config.oauth import oauth
 from models.user import User
+
+logger = logging.getLogger(__name__)
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -45,8 +48,8 @@ def callback():
         auth_param = "new" if is_new else "success"
         return redirect(f"{frontend_url}?auth={auth_param}")
 
-    except Exception as e:
-        print(f"OAuth callback error: {e}")
+    except Exception:
+        logger.exception("OAuth callback error")
         frontend_url = os.environ.get("CORS_ORIGINS", "http://localhost:5173")
         return redirect(f"{frontend_url}?auth=error")
 
