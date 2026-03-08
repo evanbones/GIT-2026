@@ -1,5 +1,5 @@
 from flask import request
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from sqlalchemy.exc import SQLAlchemyError
 
 from services.inventory_service import (
@@ -19,6 +19,21 @@ from services.inventory_service import (
 
 inventory_ns = Namespace("inventory", description="Retailer Inventory and Stock Management")
 
+inventory_model = inventory_ns.model(
+    "InventoryPayload", {"producer_id": fields.Integer(required=True, description="Producer ID for the inventory")}
+)
+
+stock_model = inventory_ns.model(
+    "StockPayload",
+    {
+        "inventory_id": fields.Integer(description="Inventory ID (optional if derived)"),
+        "item_id": fields.Integer(required=True, description="ID of the item"),
+        "quantity": fields.Float(required=True, description="Current stock quantity"),
+        "batch_number": fields.String(description="Batch identifier"),
+        "expiration_date": fields.Date(description="Expiration date (YYYY-MM-DD)"),
+    },
+)
+
 
 @inventory_ns.route("")
 class InventoryList(Resource):
@@ -26,6 +41,7 @@ class InventoryList(Resource):
         """List all retailer inventories."""
         return {"inventories": get_all_inventories()}, 200
 
+    @inventory_ns.expect(inventory_model)
     def post(self):
         """Create a new inventory for a retailer."""
         data = request.get_json()
@@ -64,6 +80,7 @@ class StockList(Resource):
         """List all specific stocks within inventories."""
         return {"stocks": get_all_stocks()}, 200
 
+    @inventory_ns.expect(stock_model)
     def post(self):
         """Add new stock for an item. Provide item_id for existing items, or a full item+prices object to create inline."""
         data = request.get_json()
@@ -108,6 +125,7 @@ class StockDetail(Resource):
             return {"stock": stock}, 200
         return {"error": "Stock not found"}, 404
 
+    @inventory_ns.expect(stock_model)
     def put(self, stock_id):
         """Update stock levels, batches, or expirations."""
         data = request.get_json()

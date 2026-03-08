@@ -1,24 +1,42 @@
 from flask import request
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, fields
 from sqlalchemy.exc import SQLAlchemyError
 
 from services.catalog_service import create_item, delete_item, get_all_items, get_item, update_item
 
 catalog_ns = Namespace("catalog", description="Catalog and Category Operations")
 
+price_model = catalog_ns.model(
+    "PricePayload",
+    {
+        "min_quantity": fields.Integer(required=True, description="Minimum quantity for this price"),
+        "max_quantity": fields.Integer(description="Maximum quantity for this price"),
+        "price_per_unit": fields.Float(required=True, description="Price per unit"),
+    },
+)
+
+item_model = catalog_ns.model(
+    "ItemPayload",
+    {
+        "producer_id": fields.Integer(required=True, description="ID of the producer"),
+        "name": fields.String(required=True, description="Item name"),
+        "description": fields.String(description="Item description"),
+        "sku": fields.String(description="Stock Keeping Unit"),
+        "unit_type": fields.String(required=True, description="Unit type (e.g., kg, liters)"),
+        "prices": fields.List(fields.Nested(price_model), description="List of volume-based prices"),
+    },
+)
+
 
 @catalog_ns.route("/items")
 class ItemList(Resource):
     def get(self):
-        """
-        Retrieve the entire item catalog.
-        """
+        """Retrieve the entire item catalog."""
         return {"items": get_all_items()}, 200
 
+    @catalog_ns.expect(item_model)
     def post(self):
-        """
-        Add a new item to the catalog.
-        """
+        """Add a new item to the catalog."""
         data = request.get_json()
         try:
             result = create_item(data)
@@ -37,6 +55,7 @@ class ItemDetail(Resource):
             return {"item": item}, 200
         return {"error": "Item not found"}, 404
 
+    @catalog_ns.expect(item_model)
     def put(self, item_id):
         """Update a specific item."""
         data = request.get_json()
