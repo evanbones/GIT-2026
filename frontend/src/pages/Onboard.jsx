@@ -81,8 +81,26 @@ export default function Onboard({ account, setAccount }) {
                     onChange={(e) => setLink(e.target.value)} 
                 />
 
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+                    <div className="onboard-radio-group">
+                        <label>
+                            <input type="radio" name="business type" value="Producer"
+                                onClick={(e) => setType(e.target.value)} />
+                            Producer
+                        </label>
+                        <label>
+                            <input type="radio" name="business type" value="Retailer"
+                                onClick={(e) => setType(e.target.value)} />
+                            Retailer
+                        </label>
+                    </div>
+
+                    <input type="text" placeholder="Business Description"
+                        value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <input type="text" placeholder="Website link"
+                        value={link} onChange={(e) => setLink(e.target.value)} />
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
     );
 }
