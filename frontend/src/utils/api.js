@@ -15,6 +15,13 @@ async function apiCall(endpoint, options = {}) {
     return response.json();
 }
 
+export const api = {
+    get: (endpoint, options = {}) => apiCall(endpoint, { method: 'GET', ...options }),
+    post: (endpoint, data, options = {}) => apiCall(endpoint, { method: 'POST', body: JSON.stringify(data), ...options }),
+    put: (endpoint, data, options = {}) => apiCall(endpoint, { method: 'PUT', body: JSON.stringify(data), ...options }),
+    delete: (endpoint, options = {}) => apiCall(endpoint, { method: 'DELETE', ...options }),
+};
+
 export const authAPI = {
     checkAuth: () => apiCall('/auth/user'),
     login: () => { window.location.href = `${API_BASE}/auth/login`; },

@@ -14,7 +14,7 @@ function Home() {
         <div className="hero-content">
           <h1 className="hero-title">Rooted in community. Sourced locally.</h1>
           <p className="hero-subtitle">
-            Connect your business or non-profit directly with local farms and distributors. Build sustainable partnerships and keep value right here in our local economy..
+            Connect your business or non-profit directly with local farms and producers. Build sustainable partnerships and keep value right here in our local economy..
           </p>
 
           <div className="hero-actions">

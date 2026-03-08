@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 
-const Checkout = ({ product, distributor, mode, onClose }) => {
+const Checkout = ({ product, producer, mode, onClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [targetQuantity, setTargetQuantity] = useState(50);
   const [step, setStep] = useState("FORM");
   const [confirmed, setConfirmed] = useState(false);
 
-  {/* Hardocoded quantities for now*/ }
+  {/* TODO: integrate */}
   const getUnitPrice = (qty) => {
-    if (qty >= 13) return Math.floor(product.basePrice * 0.8);
-    if (qty >= 6) return Math.floor(product.basePrice * 0.9);
-    return product.basePrice;
+    if (qty >= 13) return Math.floor(product.base_price * 0.8);
+    if (qty >= 6) return Math.floor(product.base_price * 0.9);
+    return product.base_price;
   };
 
   const currentUnitPrice = getUnitPrice(quantity);
   const totalPrice = currentUnitPrice * quantity;
 
-  {/* Success message */ }
   if (step === "SUCCESS") {
     return (
       <div style={overlayStyle}>
@@ -32,7 +31,6 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
     );
   }
 
-  {/* changes window depending on if its a direct purchase or a group order */ }
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
@@ -44,7 +42,7 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
         </div>
 
         <div style={{ background: "#faf6ef", padding: "15px", borderRadius: "4px", marginBottom: "25px", border: "2px solid #d4c4a8", borderLeft: "4px solid #4a7c59" }}>
-          <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>{distributor.name}</span>
+          <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>{producer.name}</span>
           <h4 style={{ margin: "5px 0 0 0", fontSize: "1.1rem", color: "#3e2f1c" }}>{product.name}</h4>
         </div>
 
@@ -58,7 +56,7 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
               style={inputStyle}
             />
             <p style={{ fontSize: "0.75rem", color: "#78695a", marginTop: "8px" }}>
-              Set the total units needed across all buyers to unlock the max discount tier (${Math.floor(product.basePrice * 0.8)}).
+              Set the total units needed across all buyers to unlock the max discount tier (${Math.floor(product.base_price * 0.8)}).
             </p>
           </div>
         )}

@@ -15,7 +15,9 @@ CREATE TABLE producers (
     company_name VARCHAR(255) NOT NULL,
     primary_address TEXT NOT NULL,
     description TEXT,
-    images BYTEA
+    images BYTEA,
+    lat DOUBLE PRECISION,
+    lng DOUBLE PRECISION
 );
 
 CREATE TABLE retailers (

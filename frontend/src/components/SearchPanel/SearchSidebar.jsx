@@ -6,7 +6,7 @@ import "./SearchPanel.css";
  * SearchSidebar Component
  * Integrates the search input with a scrollable list of results.
  */
-function SearchSidebar({ searchQuery, setSearchQuery, distributors, onSelect }) {
+function SearchSidebar({ searchQuery, setSearchQuery, producers, onSelect }) {
   return (
     <div style={{
       width: "350px",
@@ -28,7 +28,7 @@ function SearchSidebar({ searchQuery, setSearchQuery, distributors, onSelect }) 
         textTransform: "uppercase",
         letterSpacing: "0.03em"
       }}>
-        Distributors
+        Producers
       </h3>
 
       {/* Search Bar Input */}
@@ -50,8 +50,8 @@ function SearchSidebar({ searchQuery, setSearchQuery, distributors, onSelect }) 
 
       {/* Results List */}
       <div style={{ flex: 1, overflowY: "auto" }}>
-        {distributors.length > 0 ? (
-          distributors.map((dist) => (
+        {producers.length > 0 ? (
+          producers.map((dist) => (
             <div
               key={dist.id}
               onClick={() => onSelect(dist)}
@@ -86,7 +86,7 @@ function SearchSidebar({ searchQuery, setSearchQuery, distributors, onSelect }) 
             </div>
           ))
         ) : (
-          <p style={{ color: "#78695a", textAlign: "center", marginTop: "40px" }}>No distributors found.</p>
+          <p style={{ color: "#78695a", textAlign: "center", marginTop: "40px" }}>No producers found.</p>
         )}
       </div>
     </div>

@@ -54,6 +54,8 @@ class Producer(User):
     primary_address = db.Column(db.Text, nullable=False)
     company_description = db.Column("description", db.Text)
     images = db.Column(db.LargeBinary)
+    lat = db.Column(db.Float, nullable=True)
+    lng = db.Column(db.Float, nullable=True)
 
     inventory = db.relationship("Inventory", backref="producer_user", uselist=False, foreign_keys="Inventory.producer_id")
 
@@ -65,6 +67,8 @@ class Producer(User):
             "company_name": self.company_name,
             "primary_address": self.primary_address,
             "company_description": self.company_description,
+            "lat": self.lat,
+            "lng": self.lng,
             "inventory_id": self.inventory.id if self.inventory else None,
         }
 
@@ -94,3 +98,10 @@ class Consumer(User):
     shipping_address = db.Column(db.Text, nullable=True)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "consumer"}
+
+    def to_dict(self):
+        data = super().to_dict()
+        data["first_name"] = self.first_name
+        data["last_name"] = self.last_name
+        data["shipping_address"] = self.shipping_address
+        return data

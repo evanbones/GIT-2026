@@ -1,10 +1,10 @@
 import Header from "../components/Header/Header.jsx";
 import ProducerDashboard from "../components/ProducerDashboard/ProducerDashboard.jsx";
 import RetailerDashboard from "../components/RetailerDashboard/RetailerDashboard.jsx";
-import { useAuth } from "../contexts/useAuth.jsx";
+import { useAuth } from "../contexts/useAuth";
 import "./Dashboard.css";
 
-function Dashboard({ account, setAccount }) {
+function Dashboard() {
     const { isProducer, isRetailer } = useAuth();
 
     const renderDashboard = () => {
@@ -23,10 +23,10 @@ function Dashboard({ account, setAccount }) {
 
     return (
         <div className="dashboard">
-            <Header account={account} setAccount={setAccount} />
-            <div className="dashboard-content">
+            <Header />
+            <main className="dashboard-main">
                 {renderDashboard()}
-            </div>
+            </main>
         </div>
     );
 }
