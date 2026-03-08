@@ -84,7 +84,7 @@ const ProductItem = ({ product, onOrder }) => {
   );
 };
 
-function DistributorDetail({ distributor, onClose, onOrder }) {
+function ProducerDetail({ producer, onClose, onOrder }) {
   return (
     <div style={{
       width: "400px",
@@ -97,20 +97,20 @@ function DistributorDetail({ distributor, onClose, onOrder }) {
       boxShadow: "4px 0 0 #d4c4a8"
     }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px", borderBottom: "2px solid #d4c4a8", paddingBottom: "15px" }}>
-        <h2 style={{ fontFamily: "var(--brand-serif)", margin: 0, fontSize: "1.8rem", color: "#3e2f1c" }}>{distributor.name}</h2>
+        <h2 style={{ fontFamily: "var(--brand-serif)", margin: 0, fontSize: "1.8rem", color: "#3e2f1c" }}>{producer.name}</h2>
         <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", fontSize: "1.2rem", color: "#7a5c3e" }}>✕</button>
       </div>
 
-      <p style={{ color: "#7a5c3e", fontSize: "0.9rem", marginBottom: "5px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.03em" }}>{distributor.type}</p>
-      <p style={{ color: "#78695a", fontSize: "0.85rem", marginBottom: "25px" }}>📍 {distributor.address}</p>
+      <p style={{ color: "#7a5c3e", fontSize: "0.9rem", marginBottom: "5px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.03em" }}>{producer.type}</p>
+      <p style={{ color: "#78695a", fontSize: "0.85rem", marginBottom: "25px" }}>📍 {producer.address}</p>
 
       <h4 style={{ fontSize: "0.85rem", color: "#7a5c3e", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: "15px", fontWeight: 700, borderBottom: "1px solid #d4c4a8", paddingBottom: "8px" }}>Available Products</h4>
       <div style={{ flex: 1, overflowY: "auto" }}>
-        {distributor.fullProducts.map((prod, idx) => (
+        {producer.fullProducts.map((prod, idx) => (
           <ProductItem
             key={idx}
             product={prod}
-            onOrder={(p, mode) => onOrder(p, distributor, mode)}
+            onOrder={(p, mode) => onOrder(p, producer, mode)}
           />
         ))}
       </div>
@@ -118,4 +118,4 @@ function DistributorDetail({ distributor, onClose, onOrder }) {
   );
 }
 
-export default DistributorDetail;
+export default ProducerDetail;

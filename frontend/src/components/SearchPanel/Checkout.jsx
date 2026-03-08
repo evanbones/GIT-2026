@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Checkout = ({ product, distributor, mode, onClose }) => {
+const Checkout = ({ product, producer, mode, onClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [targetQuantity, setTargetQuantity] = useState(50);
   const [step, setStep] = useState("FORM");
@@ -44,7 +44,7 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
         </div>
 
         <div style={{ background: "#faf6ef", padding: "15px", borderRadius: "4px", marginBottom: "25px", border: "2px solid #d4c4a8", borderLeft: "4px solid #4a7c59" }}>
-          <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>{distributor.name}</span>
+          <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>{producer.name}</span>
           <h4 style={{ margin: "5px 0 0 0", fontSize: "1.1rem", color: "#3e2f1c" }}>{product.name}</h4>
         </div>
 

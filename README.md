@@ -7,7 +7,7 @@
 
 ## About The Project
 
-What is "Town Square"? Town Square aims to capture value for small businesses by bridging the gap between clients and producers. Our web application empowers local businesses, non-profits or foundations to source products from local farms and distributors while sustainably supporting the local economy.
+What is "Town Square"? Town Square aims to capture value for small businesses by bridging the gap between clients and producers. Our web application empowers local businesses, non-profits or foundations to source products from local farms and producers while sustainably supporting the local economy.
 
 ### Tech Stack
 

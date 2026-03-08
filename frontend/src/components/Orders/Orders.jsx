@@ -7,7 +7,7 @@ function Orders() {
         {
             id: 1,
             name: "IPA Case",
-            distributor: "West Side Brewery",
+            producer: "West Side Brewery",
             status: "pending",
             cost: 180,
             userQty: 5,
@@ -17,7 +17,7 @@ function Orders() {
         {
             id: 2,
             name: "Pinot Noir Case",
-            distributor: "Valley Vineyards",
+            producer: "Valley Vineyards",
             status: "completed",
             cost: 192,
             userQty: 2,
@@ -53,7 +53,7 @@ function Orders() {
                             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
                                 <div>
                                     <h3 style={{ margin: "0 0 4px 0", fontSize: "1.1rem", color: "#3e2f1c", fontWeight: 700 }}>{order.name}</h3>
-                                    <span style={{ fontSize: "0.85rem", color: "#78695a" }}>{order.distributor}</span>
+                                    <span style={{ fontSize: "0.85rem", color: "#78695a" }}>{order.producer}</span>
                                 </div>
                                 <div style={{ textAlign: "right" }}>
                                     <span style={{

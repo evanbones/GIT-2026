@@ -1,96 +1,90 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Map from "../components/Map/Map.jsx";
 import Header from "../components/Header/Header.jsx";
 import SearchSidebar from "../components/SearchPanel/SearchSidebar.jsx";
-import DistributorDetail from "../components/SearchPanel/DistributorDetail.jsx";
+import ProducerDetail from "../components/SearchPanel/ProducerDetail.jsx";
 import Checkout from "../components/SearchPanel/Checkout.jsx";
-
-const producers = [
-    {
-      id: 1,
-      name: "Mission Creek Brewing",
-      type: "Brewery",
-      lat: 49.8625,
-      lng: -119.4625,
-      address: "123 Lakeshore Rd, Kelowna, BC",
-      products: ["Okanagan IPA", "Lakeshore Lager"],
-      fullProducts: [
-        { name: "Okanagan IPA", basePrice: 48 },
-        { name: "Lakeshore Lager", basePrice: 42 }
-      ]
-    },
-    {
-      id: 2,
-      name: "Quails' Gate Winery",
-      type: "Winery",
-      lat: 49.843030,
-      lng: -119.565626,
-      address: "3303 Boucherie Rd, West Kelowna, BC",
-      products: ["Pinot Noir", "Chardonnay"],
-      fullProducts: [
-        { name: "Pinot Noir", basePrice: 135 },
-        { name: "Chardonnay", basePrice: 110 }
-      ]
-    },
-    {
-      id: 3,
-      name: "Okanagan Spirits Distillery",
-      type: "Distillery",
-      lat: 49.8650,
-      lng: -119.3800,
-      address: "4400 Road road, Kelowna, BC",
-      products: ["Rebel Vodka", "Forbidden Gin"],
-      fullProducts: [
-        { name: "Rebel Vodka", basePrice: 65 },
-        { name: "Forbidden Gin", basePrice: 70 }
-      ]
-    }
-];
+import { api } from "../utils/api.js";
 
 export default function MapView() {
+    const [producers, setProducers] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedDistributor, setSelectedDistributor] = useState(null);
+    const [selectedProducer, setSelectedProducer] = useState(null);
     const [checkoutInfo, setCheckoutInfo] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducers = async () => {
+            try {
+                const response = await api.get("/users");
+
+                const mappedProducers = response.users
+                    .filter(user => user.user_type === "producer")
+                    .map(p => ({
+                        id: p.id,
+                        name: p.company_name || "Unknown Company",
+                        type: "Producer",
+                        lat: p.lat || 49.8625,
+                        lng: p.lng || -119.4625,
+                        address: p.primary_address || "Address not provided",
+
+                        products: p.inventory ? p.inventory.map(item => item.name) : [],
+                        fullProducts: p.inventory || []
+                    }));
+
+                setProducers(mappedProducers);
+            } catch (error) {
+                console.error("Failed to fetch producers:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchProducers();
+    }, []);
 
     const filteredProducers = producers.filter(p => {
         const searchLower = searchQuery.toLowerCase();
         return p.name.toLowerCase().includes(searchLower) ||
-               p.products.some(prod => prod.toLowerCase().includes(searchLower));
+               (p.products && p.products.some(prod => prod.toLowerCase().includes(searchLower)));
     });
 
     return (
         <div style={{ height: "100vh", width: "100vw", display: "flex", overflow: "hidden", backgroundColor: "#faf6ef" }}>
-            
+
             <SearchSidebar
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
-                distributors={filteredProducers}
-                onSelect={(dist) => setSelectedDistributor(dist)}
+                producers={filteredProducers}
+                onSelect={(dist) => setSelectedProducer(dist)}
             />
 
-            {/* Distributor Detail: Also spans full height if active */}
-            {selectedDistributor && (
-                <DistributorDetail
-                    distributor={selectedDistributor}
-                    onClose={() => setSelectedDistributor(null)}
-                    onOrder={(product, dist, mode) => setCheckoutInfo({ product, distributor: dist, mode })}
+            {selectedProducer && (
+                <ProducerDetail
+                    producer={selectedProducer}
+                    onClose={() => setSelectedProducer(null)}
+                    onOrder={(product, dist, mode) => setCheckoutInfo({ product, producer: dist, mode })}
                 />
             )}
 
-            {/* Main Area */}
             <div style={{ flex: 1, position: "relative", height: "100%" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, width: "100%", zIndex: 1000 }}>
                     <Header />
                 </div>
-                
-                <Map pins={filteredProducers} selectedId={selectedDistributor?.id} />
+
+                {isLoading ? (
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+                        <h2>Loading Map Data...</h2>
+                    </div>
+                ) : (
+                    <Map pins={filteredProducers} selectedId={selectedProducer?.id} />
+                )}
             </div>
 
-            {/* Checkout Overlay */}
             {checkoutInfo && (
                 <Checkout
                     product={checkoutInfo.product}
-                    distributor={checkoutInfo.distributor}
+                    producer={checkoutInfo.producer}
                     mode={checkoutInfo.mode}
                     onClose={() => setCheckoutInfo(null)}
                 />

@@ -1,0 +1,97 @@
+TRUNCATE TABLE users, producers, retailers, consumers, items, prices, inventories, stocks, stock_request_lists, stock_requests, group_buys, group_buy_participants, buy_stock_offers, inventory_orders, order_items RESTART IDENTITY CASCADE;
+
+DO $$
+DECLARE
+    producer_record RECORD;
+    producers_list JSONB := '[
+        {"id": 4, "name": "4 Elements Farm"}, {"id": 6, "name": "50th Parallel Estate Winery"},
+        {"id": 7, "name": "Ancient Hill Estate Winery"}, {"id": 8, "name": "Arndt Orchards"},
+        {"id": 9, "name": "Arrowleaf Cellars"}, {"id": 10, "name": "BC Tree Fruits Cider Co."},
+        {"id": 11, "name": "BNA Brewing Co. & Eatery"}, {"id": 12, "name": "Barn Owl Brewing Company"},
+        {"id": 13, "name": "Beaumont Family Estate Winery"}, {"id": 14, "name": "Blind Tiger Vineyards"},
+        {"id": 15, "name": "Calona Vineyards"}, {"id": 16, "name": "CedarCreek Estate Winery"},
+        {"id": 17, "name": "Ciao Bella Winery"}, {"id": 18, "name": "Copper Brewing Co."},
+        {"id": 19, "name": "Crosby Organics"}, {"id": 20, "name": "Curly Frog Farm"},
+        {"id": 21, "name": "Ex Nihilo Vineyards"}, {"id": 22, "name": "Firefly Farms"},
+        {"id": 23, "name": "Forbidden Spirits Distilling Co."}, {"id": 24, "name": "Frequency Winery"},
+        {"id": 25, "name": "Frind Estate Winery"}, {"id": 26, "name": "Gambell Farms"},
+        {"id": 27, "name": "Gray Monk Estate Winery"}, {"id": 28, "name": "Griffin Farms"},
+        {"id": 29, "name": "Grizzli Winery"}, {"id": 30, "name": "Indigenous World Winery"},
+        {"id": 31, "name": "Intrigue Wines"}, {"id": 32, "name": "Jackknife Brewing"},
+        {"id": 33, "name": "Kalala Organic Estate Winery"}, {"id": 34, "name": "Kelowna Beer Institute"},
+        {"id": 35, "name": "Kempf Orchards"}, {"id": 36, "name": "Kettle River Brewing Co."},
+        {"id": 37, "name": "Lakesider Brewing"}, {"id": 38, "name": "Little Straw Vineyards"},
+        {"id": 39, "name": "MacDonald Acres"}, {"id": 40, "name": "Martin''s Lane Winery"},
+        {"id": 41, "name": "Meadow Vista Honey Wines"}, {"id": 42, "name": "Mission Hill Family Estate Winery"},
+        {"id": 43, "name": "MotherLove Ferments"}, {"id": 44, "name": "Mount Boucherie Estate Winery"},
+        {"id": 45, "name": "Nagging Doubt Wines"}, {"id": 46, "name": "Off the Grid Organic Winery"},
+        {"id": 47, "name": "Okanagan Spirits Craft Distillery"}, {"id": 48, "name": "Paynter''s Fruit Market"},
+        {"id": 49, "name": "Peak Cellars"}, {"id": 50, "name": "Priest Creek Family Estate Winery"},
+        {"id": 51, "name": "Quails'' Gate Winery"}, {"id": 52, "name": "Railside Brewing"},
+        {"id": 53, "name": "Red Bird Brewing"}, {"id": 54, "name": "Rollingdale Winery"},
+        {"id": 55, "name": "Rustic Reel Brewing Co."}, {"id": 56, "name": "Sandhill Wines"},
+        {"id": 57, "name": "Scenic Road Cider Co."}, {"id": 58, "name": "Scorched Earth Winery"},
+        {"id": 59, "name": "Shore Line Brewing"}, {"id": 60, "name": "Soma Craft Cidery"},
+        {"id": 61, "name": "SpearHead Winery"}, {"id": 62, "name": "Sperling Vineyards"},
+        {"id": 63, "name": "St. Hubertus & Oak Bay Estate Winery"}, {"id": 64, "name": "Summerhill Pyramid Winery"},
+        {"id": 65, "name": "Sun City Cherries"}, {"id": 66, "name": "Tantalus Vineyards"},
+        {"id": 67, "name": "The Gallery Winery"}, {"id": 68, "name": "The Hatch"},
+        {"id": 69, "name": "The Hatching Post Brewery & Smokery"}, {"id": 70, "name": "The Vibrant Vine"},
+        {"id": 71, "name": "The View Winery & Vineyard"}, {"id": 72, "name": "Tree Brewing Beer Institute"},
+        {"id": 73, "name": "Truck 59 Ciderhouse"}, {"id": 74, "name": "Unleashed Brewing Company"},
+        {"id": 75, "name": "Upside Cider"}, {"id": 76, "name": "Urban Distilleries + Winery"},
+        {"id": 77, "name": "Vice & Virtue Brewing Co."}, {"id": 78, "name": "Volcanic Hills Estate Winery"},
+        {"id": 79, "name": "Wards Cider"}, {"id": 80, "name": "Wild Ambition Brewing"},
+        {"id": 81, "name": "Wise Earth Farm"}
+    ]';
+BEGIN
+    FOR producer_record IN SELECT * FROM jsonb_to_recordset(producers_list) AS x(id int, name text)
+    LOOP
+        INSERT INTO users (id, email, password_hash, user_type, description)
+        VALUES (producer_record.id, lower(replace(replace(producer_record.name, ' ', '.'), '&', 'and')) || '@producer.com', 'demo_hash', 'producer', 'Local Producer: ' || producer_record.name);
+
+        INSERT INTO producers (id, company_name, primary_address)
+        VALUES (producer_record.id, producer_record.name, 'Okanagan Valley, BC');
+
+        INSERT INTO inventories (producer_id) VALUES (producer_record.id);
+    END LOOP;
+END $$;
+
+INSERT INTO users (id, email, password_hash, user_type) VALUES
+(100, 'buyer@saveon.com', 'hash', 'retailer'),
+(101, 'manager@craftliquor.com', 'hash', 'retailer');
+
+INSERT INTO retailers (id, company_name, store_address) VALUES
+(100, 'Save-On-Foods Orchard Plaza', '1876 Cooper Rd, Kelowna, BC'),
+(101, 'Downtown Craft Liquor', '1405 St Paul St, Kelowna, BC');
+
+INSERT INTO users (id, email, password_hash, user_type) VALUES (200, 'jane.doe@gmail.com', 'hash', 'consumer');
+INSERT INTO consumers (id, first_name, last_name, shipping_address) VALUES (200, 'Jane', 'Doe', '123 Lakeshore Rd, Kelowna, BC');
+
+INSERT INTO items (id, producer_id, name, sku, unit_type) VALUES
+(1, 6, 'Pinot Noir 2022', '50TH-PN-22', 'Bottle'),
+(2, 11, 'Purple Juice IPA', 'BNA-IPA-PJ', 'Flat'),
+(3, 81, 'Organic Baby Kale', 'WEF-KALE', 'Pound');
+
+INSERT INTO stocks (inventory_id, item_id, quantity, batch_number) VALUES
+( (SELECT id FROM inventories WHERE producer_id = 6), 1, 500.0, 'VINT-01'),
+( (SELECT id FROM inventories WHERE producer_id = 11), 2, 100.0, 'BREW-99'),
+( (SELECT id FROM inventories WHERE producer_id = 81), 3, 250.0, 'HARV-MARCH');
+
+INSERT INTO group_buys (id, initiator_retailer_id, item_id, target_quantity, current_quantity, deadline, status) VALUES
+(1, 101, 1, 100.0, 40.0, '2026-04-01 12:00:00', 'ACTIVE');
+
+INSERT INTO group_buy_participants (group_buy_id, retailer_id, pledged_quantity) VALUES
+(1, 101, 20.0),
+(1, 100, 20.0);
+
+INSERT INTO stock_request_lists (id, producer_id, status) VALUES (1, 6, 'OPEN');
+INSERT INTO stock_requests (list_id, retailer_id, item_id, quantity_requested, status) VALUES
+(1, 101, 1, 12.0, 'PENDING');
+
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
+SELECT setval('items_id_seq', (SELECT MAX(id) FROM items));
+SELECT setval('inventories_id_seq', (SELECT MAX(id) FROM inventories));
+SELECT setval('stocks_id_seq', (SELECT MAX(id) FROM stocks));
+SELECT setval('group_buys_id_seq', (SELECT MAX(id) FROM group_buys));
+SELECT setval('inventory_orders_id_seq', (SELECT MAX(id) FROM inventory_orders));

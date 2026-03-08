@@ -48,19 +48,23 @@ class User(db.Model):
 
 
 class Producer(User):
-    __tablename__: ClassVar[str] = "producers"
+    __tablename__ = "producers"
     id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     company_name = db.Column(db.String(255), nullable=False)
     primary_address = db.Column(db.Text, nullable=False)
     company_description = db.Column("description", db.Text)
     images = db.Column(db.LargeBinary)
+    lat = db.Column(db.Float, nullable=True)
+    lng = db.Column(db.Float, nullable=True)
 
-    __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}
+    __mapper_args__ = {"polymorphic_identity": "producer"}
 
     def to_dict(self):
         data = super().to_dict()
         data["company_name"] = self.company_name
         data["primary_address"] = self.primary_address
+        data["lat"] = self.lat
+        data["lng"] = self.lng
         return data
 
 
