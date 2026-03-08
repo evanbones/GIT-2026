@@ -3,11 +3,11 @@ import React, { useState } from "react";
 const ProductItem = ({ product, onOrder }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  {/* hardcoded pricing tiers for now*/}
+  {/* TODO: integrate */}
   const tiers = [
-    { qty: "1-5", price: product.basePrice },
-    { qty: "6-12", price: Math.floor(product.basePrice * 0.9) },
-    { qty: "13+", price: Math.floor(product.basePrice * 0.8) },
+    { qty: "1-5", price: product.base_price },
+    { qty: "6-12", price: Math.floor(product.base_price * 0.9) },
+    { qty: "13+", price: Math.floor(product.base_price * 0.8) },
   ];
 
   return (
@@ -32,7 +32,7 @@ const ProductItem = ({ product, onOrder }) => {
       >
         <div>
           <h5 style={{ margin: 0, fontSize: "1rem", fontWeight: 700, color: "#3e2f1c" }}>{product.name}</h5>
-          <span style={{ fontSize: "0.85rem", color: "#78695a" }}>Starting at ${product.basePrice}</span>
+          <span style={{ fontSize: "0.85rem", color: "#78695a" }}>Starting at ${product.base_price}</span>
         </div>
         <span style={{ fontSize: "0.8rem", color: "#c4a882", fontWeight: 700 }}>{isExpanded ? "▲" : "▼"}</span>
       </div>

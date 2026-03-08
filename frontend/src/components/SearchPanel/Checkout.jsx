@@ -6,17 +6,16 @@ const Checkout = ({ product, producer, mode, onClose }) => {
   const [step, setStep] = useState("FORM");
   const [confirmed, setConfirmed] = useState(false);
 
-  {/* Hardocoded quantities for now*/ }
+  {/* TODO: integrate */}
   const getUnitPrice = (qty) => {
-    if (qty >= 13) return Math.floor(product.basePrice * 0.8);
-    if (qty >= 6) return Math.floor(product.basePrice * 0.9);
-    return product.basePrice;
+    if (qty >= 13) return Math.floor(product.base_price * 0.8);
+    if (qty >= 6) return Math.floor(product.base_price * 0.9);
+    return product.base_price;
   };
 
   const currentUnitPrice = getUnitPrice(quantity);
   const totalPrice = currentUnitPrice * quantity;
 
-  {/* Success message */ }
   if (step === "SUCCESS") {
     return (
       <div style={overlayStyle}>
@@ -32,7 +31,6 @@ const Checkout = ({ product, producer, mode, onClose }) => {
     );
   }
 
-  {/* changes window depending on if its a direct purchase or a group order */ }
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
@@ -58,7 +56,7 @@ const Checkout = ({ product, producer, mode, onClose }) => {
               style={inputStyle}
             />
             <p style={{ fontSize: "0.75rem", color: "#78695a", marginTop: "8px" }}>
-              Set the total units needed across all buyers to unlock the max discount tier (${Math.floor(product.basePrice * 0.8)}).
+              Set the total units needed across all buyers to unlock the max discount tier (${Math.floor(product.base_price * 0.8)}).
             </p>
           </div>
         )}

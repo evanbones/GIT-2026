@@ -74,7 +74,7 @@ class Producer(User):
             base_price = min([float(p.price_per_unit) for p in item.prices]) if item.prices else 0
 
             inventory_data.append(
-                {"id": item.id, "name": item.name, "description": item.description, "basePrice": base_price}
+                {"id": item.id, "name": item.name, "description": item.description, "base_price": base_price}
             )
 
         data["inventory"] = inventory_data
