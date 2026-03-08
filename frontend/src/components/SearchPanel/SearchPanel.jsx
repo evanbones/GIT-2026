@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { Search } from "lucide-react";
-import "./SearchBar.css";
+import "./SearchPanel.css";
 
-function SearchBar() {
+/**
+ * SearchPanel Component
+ * A standalone search bar component used in the Header and Sidebar.
+ */
+function SearchPanel() {
   const [query, setQuery] = useState("");
 
   const handleSubmit = (e) => {
@@ -28,4 +32,4 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default SearchPanel;

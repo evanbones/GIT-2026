@@ -1,6 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
-import "./SearchBar.css";
+import "./SearchPanel.css";
 
 /**
  * SearchSidebar Component
@@ -8,24 +8,29 @@ import "./SearchBar.css";
  */
 function SearchSidebar({ searchQuery, setSearchQuery, distributors, onSelect }) {
   return (
-    <div style={{ 
-      width: "350px", 
-      display: "flex", 
+    <div style={{
+      width: "350px",
+      display: "flex",
       flexDirection: "column",
-      background: "white",
-      borderRight: "1px solid #e0e0e0",
+      background: "#fffdf7",
+      borderRight: "2px solid #c4a882",
       padding: "20px",
       zIndex: 5
     }}>
-      <h3 style={{ 
-        fontFamily: "var(--brand-serif)", 
-        marginTop: 0, 
+      <h3 style={{
+        fontFamily: "var(--brand-serif)",
+        marginTop: 0,
         marginBottom: "15px",
-        fontSize: "1.5rem" 
+        fontSize: "1.5rem",
+        color: "#3e2f1c",
+        borderBottom: "2px solid #d4c4a8",
+        paddingBottom: "10px",
+        textTransform: "uppercase",
+        letterSpacing: "0.03em"
       }}>
         Distributors
       </h3>
-      
+
       {/* Search Bar Input */}
       <div className="search-bar" style={{ marginBottom: "20px" }}>
         <form onSubmit={(e) => e.preventDefault()} className="search-form" style={{ width: "100%" }}>
@@ -47,38 +52,41 @@ function SearchSidebar({ searchQuery, setSearchQuery, distributors, onSelect }) 
       <div style={{ flex: 1, overflowY: "auto" }}>
         {distributors.length > 0 ? (
           distributors.map((dist) => (
-            <div 
+            <div
               key={dist.id}
               onClick={() => onSelect(dist)}
               style={{
                 padding: "15px",
                 marginBottom: "10px",
-                background: "#fdfdfd",
-                borderRadius: "8px",
-                border: "1px solid #eee",
+                background: "#fffdf7",
+                borderRadius: "4px",
+                border: "1px solid #d4c4a8",
+                borderLeft: "4px solid #4a7c59",
                 cursor: "pointer",
                 transition: "all 0.2s ease"
               }}
             >
-              <h4 style={{ margin: "0 0 5px 0", color: "#1a1a1a", fontWeight: 600 }}>{dist.name}</h4>
-              <span style={{ 
-                fontSize: "0.75rem", 
-                background: "#f0f0f0", 
-                padding: "3px 8px", 
-                borderRadius: "12px",
-                color: "#666",
+              <h4 style={{ margin: "0 0 5px 0", color: "#3e2f1c", fontWeight: 700 }}>{dist.name}</h4>
+              <span style={{
+                fontSize: "0.75rem",
+                background: "#f0ead2",
+                padding: "2px 8px",
+                borderRadius: "3px",
+                color: "#7a5c3e",
                 textTransform: "uppercase",
-                letterSpacing: "0.03em"
+                letterSpacing: "0.05em",
+                fontWeight: 700,
+                border: "1px solid #d4c4a8"
               }}>
                 {dist.type}
               </span>
-              <p style={{ fontSize: "0.85rem", color: "#888", marginTop: "10px" }}>
+              <p style={{ fontSize: "0.85rem", color: "#78695a", marginTop: "10px" }}>
                 {dist.products.join(", ")}
               </p>
             </div>
           ))
         ) : (
-          <p style={{ color: "#999", textAlign: "center", marginTop: "40px" }}>No distributors found.</p>
+          <p style={{ color: "#78695a", textAlign: "center", marginTop: "40px" }}>No distributors found.</p>
         )}
       </div>
     </div>

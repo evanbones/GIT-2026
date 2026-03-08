@@ -1,9 +1,9 @@
-import OnboardForm from "../components/OnboardForm/OnboardForm.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header/Header.jsx";
 import "./SignUp.css";
 
-function SignUp({ setAccount }) {
+function SignUp({ account, setAccount }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -33,13 +33,14 @@ function SignUp({ setAccount }) {
         } else {
             setError("");
             // put info in db
-            setAccount = true;
+            setAccount(true);
             navigate("/onboard");
         }
     }
 
     return (
         <div className="signup-page">
+            <Header account={account} setAccount={setAccount} />
             <form className="signup-form" onSubmit={handleCredsSubmit}>
                 <h2>Sign Up</h2>
                 <input type="text" placeholder="Email" value={email}
@@ -49,7 +50,6 @@ function SignUp({ setAccount }) {
                 {error && <p className="signup-error">{error}</p>}
                 <button type="submit">Sign Up</button>
             </form>
-
         </div>
     )
 }

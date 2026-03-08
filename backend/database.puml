@@ -1,4 +1,4 @@
-@startuml
+@startuml database
 skinparam class {
     BackgroundColor LightYellow
     ArrowColor #4A90E2
