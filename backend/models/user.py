@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import ClassVar
 
 from database import db
-from models.catalog import Item
 
 
 class User(db.Model):
@@ -49,7 +48,7 @@ class User(db.Model):
 
 
 class Producer(User):
-    __tablename__ = "producers"
+    __tablename__: ClassVar[str] = "producers"
     id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     company_name = db.Column(db.String(255), nullable=False)
     primary_address = db.Column(db.Text, nullable=False)
@@ -58,28 +57,20 @@ class Producer(User):
     lat = db.Column(db.Float, nullable=True)
     lng = db.Column(db.Float, nullable=True)
 
-    __mapper_args__ = {"polymorphic_identity": "producer"}
+    inventory = db.relationship("Inventory", backref="producer_user", uselist=False, foreign_keys="Inventory.producer_id")
+
+    __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}
 
     def to_dict(self):
-        data = super().to_dict()
-        data["company_name"] = self.company_name
-        data["primary_address"] = self.primary_address
-        data["lat"] = self.lat
-        data["lng"] = self.lng
-
-        items = Item.query.filter_by(producer_id=self.id).all()
-
-        inventory_data = []
-        for item in items:
-            base_price = min([float(p.price_per_unit) for p in item.prices]) if item.prices else 0
-
-            inventory_data.append(
-                {"id": item.id, "name": item.name, "description": item.description, "base_price": base_price}
-            )
-
-        data["inventory"] = inventory_data
-
-        return data
+        return {
+            **super().to_dict(),
+            "company_name": self.company_name,
+            "primary_address": self.primary_address,
+            "company_description": self.company_description,
+            "lat": self.lat,
+            "lng": self.lng,
+            "inventory_id": self.inventory.id if self.inventory else None,
+        }
 
 
 class Retailer(User):
@@ -92,10 +83,11 @@ class Retailer(User):
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "retailer"}
 
     def to_dict(self):
-        data = super().to_dict()
-        data["company_name"] = self.company_name
-        data["store_address"] = self.store_address
-        return data
+        return {
+            **super().to_dict(),
+            "company_name": self.company_name,
+            "store_address": self.store_address,
+        }
 
 
 class Consumer(User):

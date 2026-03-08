@@ -8,9 +8,10 @@ import Dashboard from "./pages/Dashboard.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Login from "./pages/Login.jsx";
 import MapView from "./pages/MapView.jsx";
-import Onboard from "./pages/Onboard.jsx"
+import Onboard from "./pages/Onboard.jsx";
 import Clippy from "./components/Clippy/Clippy.jsx";
 import AuthHandler from "./components/AuthHandler.jsx";
+import ProducerDashboard from "./components/ProducerDashboard/ProducerDashboard.jsx";
 
 function App() {
 
@@ -22,7 +23,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={
-              <PrivateRoute>
+              <PrivateRoute allowedRoles={['producer', 'retailer']} redirectTo="/onboard">
                 <Dashboard />
               </PrivateRoute>
             } />
@@ -31,6 +32,11 @@ function App() {
             <Route path="/onboard" element={
               <PrivateRoute>
                 <Onboard />
+              </PrivateRoute>
+            } />
+            <Route path="/inventory" element={
+              <PrivateRoute allowedRoles={['producer']}>
+                <ProducerDashboard />
               </PrivateRoute>
             } />
             <Route path="/map" element={<MapView />} />
