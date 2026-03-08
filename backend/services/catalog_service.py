@@ -3,13 +3,6 @@ from models.catalog import Item
 
 
 def get_all_items():
-    """
-    Retrieves all catalog items (acting as categories/products).
-
-    Returns:
-        list[dict]: A list of dictionaries representing the catalog items.
-
-    """
     items = Item.query.all()
     return [
         {"id": i.id, "name": i.name, "sku": i.sku, "producer_id": i.producer_id, "unit_type": i.unit_type}
@@ -17,24 +10,45 @@ def get_all_items():
     ]
 
 
+def get_item(item_id):
+    item = db.session.get(Item, item_id)
+    if not item:
+        return None
+    return {
+        "id": item.id,
+        "name": item.name,
+        "sku": item.sku,
+        "producer_id": item.producer_id,
+        "unit_type": item.unit_type,
+    }
+
+
 def create_item(data):
-    """
-    Creates a new item in the catalog.
-
-    Args:
-        data (dict): Payload containing item details (producer_id, name, sku, unit_type, description).
-
-    Returns:
-        dict: The created item data.
-
-    """
     item = Item(
-        producer_id=data.get("producer_id"),
-        name=data.get("name"),
-        description=data.get("description"),
-        sku=data.get("sku"),
-        unit_type=data.get("unit_type"),
+        producer_id=data.get("producer_id"), name=data.get("name"), sku=data.get("sku"), unit_type=data.get("unit_type")
     )
     db.session.add(item)
     db.session.commit()
     return {"id": item.id, "name": item.name, "sku": item.sku}
+
+
+def update_item(item_id, data):
+    item = db.session.get(Item, item_id)
+    if not item:
+        return None
+
+    item.name = data.get("name", item.name)
+    item.sku = data.get("sku", item.sku)
+    item.unit_type = data.get("unit_type", item.unit_type)
+
+    db.session.commit()
+    return {"id": item.id, "name": item.name, "sku": item.sku}
+
+
+def delete_item(item_id):
+    item = db.session.get(Item, item_id)
+    if not item:
+        return False
+    db.session.delete(item)
+    db.session.commit()
+    return True
