@@ -29,3 +29,6 @@ __pycache__/
 
 #.env variables
 .env
+
+#flask-session
+flask_session/

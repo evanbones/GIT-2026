@@ -1,23 +1,25 @@
 import React from "react";
 import "./Header.css";
 import SearchBar from "../SearchBar/SearchBar.jsx";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
 function Header({ account, setAccount }) {
+  const { isAuthenticated, signOut } = useAuth();
   let links;
 
-  if (account) {
+  if (isAuthenticated) {
     links = (
       <div className="links">
         <a href="/map">Map</a>
         <a href="/dashboard">Dashboard</a>
-        <a href="/sign-out">Sign Out</a>
+        <button onClick={signOut} className="link-btn">Sign Out</button>
       </div>
     )
   } else {
     links = (
       <div className="links">
         <a href="/map">Map</a>
-        <a href="/log-in">Log In</a>
+        <a href="/sign-in">Log In</a>
       </div>
     )
   }
