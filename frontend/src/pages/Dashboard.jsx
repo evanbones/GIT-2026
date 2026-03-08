@@ -1,16 +1,19 @@
 import Orders from "../components/Orders/Orders.jsx";
 import "./Dashboard.css";
 import Header from "../components/Header/Header.jsx";
+import { useAuth } from "../contexts/useAuth";
 
-function Dashboard({ account, setAccount }) {
+function Dashboard() {
+    const { user } = useAuth();
+
     return (
         <div className="dashboard">
-            <div className="header">
-                <Header account={account} setAccount={setAccount} />
-            </div>
-            <div className="dashboard-bottom-left">
-                <Orders />
-            </div>
+            <Header />
+            <main className="dashboard-main">
+                <div className="orders-section">
+                    <Orders />
+                </div>
+            </main>
         </div>
     );
 }
