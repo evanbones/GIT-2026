@@ -5,7 +5,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(62, 47, 28, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,20 +13,21 @@
 }
 
 .modal-content {
-    background-color: white;
-    border-radius: 16px;
+    background-color: var(--farm-card);
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
     padding: 2em;
     width: 100%;
     max-width: 400px;
     font-family: var(--brand-sans);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 0 var(--farm-shadow);
 }
 
 .modal-content h2 {
     margin: 0 0 1em 0;
     font-family: var(--brand-serif);
     font-size: 1.5rem;
-    color: #1a1a1a;
+    color: var(--text-color);
 }
 
 
@@ -34,21 +35,25 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: 1px solid black;
-    border-radius: 16px;
-    background-color: white;
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--farm-card);
     padding: 2em;
     font-family: var(--brand-sans);
     gap: 1.2em;
     width: 100%;
     max-width: 480px;
+    box-shadow: 0 3px 0 var(--farm-border-light);
 }
 
 .inventory-wrapper h2 {
     margin: 0 0 0.2em 0;
     font-family: var(--brand-serif);
     font-size: 1.5rem;
-    color: #1a1a1a;
+    color: var(--text-color);
+    border-bottom: var(--border-thick) solid var(--farm-border-light);
+    padding-bottom: 0.3em;
+    width: 100%;
 }
 
 /* ── Add‑item header row ── */
@@ -62,20 +67,20 @@
 .inventory-header p {
     margin: 0;
     font-size: 1rem;
-    font-weight: 500;
-    color: #1a1a1a;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 .inventory-header button {
-    background-color: #1a1a1a;
+    background-color: var(--farm-green);
     color: white;
     border: none;
     width: 32px;
     height: 32px;
-    border-radius: 50%;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -83,7 +88,7 @@
 }
 
 .inventory-header button:hover {
-    background-color: #333;
+    background-color: var(--farm-green-hover);
 }
 
 /* ── Item cards ── */
@@ -100,19 +105,22 @@
     gap: 0.2em 1em;
     align-items: center;
     padding: 0.8em 1em;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    border: 1px solid var(--farm-border-light);
+    border-left: 4px solid var(--farm-green);
+    border-radius: var(--radius-sm);
     text-align: left;
     transition: border-color 0.2s ease-in-out;
+    background-color: var(--farm-card);
 }
 
 .inventory-card:hover {
-    border-color: #1a1a1a;
+    border-color: var(--farm-brown);
+    border-left-color: var(--farm-brown);
 }
 
 .inventory-card .item-name {
     font-weight: 600;
-    color: #1a1a1a;
+    color: var(--text-color);
     margin: 0;
     justify-self: start;
 }
@@ -123,7 +131,7 @@
     align-items: center;
     margin: 0;
     font-size: 0.9rem;
-    color: #555;
+    color: var(--farm-text-muted);
     justify-self: end;
 }
 
@@ -131,7 +139,7 @@
     grid-column: 1 / -1;
     margin: 0;
     font-size: 0.85rem;
-    color: #777;
+    color: var(--farm-text-muted);
     text-align: left;
 }
 
@@ -146,57 +154,62 @@
 .new-item-form input[type="text"],
 .new-item-form textarea {
     width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: var(--border-thick) solid var(--farm-border-light);
+    border-radius: var(--radius-sm);
     padding: 0.5em 0.8em;
     font-size: 0.95rem;
     font-family: var(--brand-sans);
-    color: #1a1a1a;
+    color: var(--text-color);
     box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s ease-in-out;
     resize: vertical;
+    background-color: var(--farm-card);
 }
 
 .new-item-form input[type="text"]:focus,
 .new-item-form textarea:focus {
-    border-color: #1a1a1a;
+    border-color: var(--farm-green);
 }
 
 .new-item-form button[type="submit"] {
-    background-color: #1a1a1a;
+    background-color: var(--farm-green);
     color: white;
     border: none;
-    padding: 0.5em 1.4em;
-    border-radius: 50px;
+    padding: 0.55em 1.4em;
+    border-radius: var(--radius-btn);
     cursor: pointer;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600;
     font-family: var(--brand-sans);
     transition: background-color 0.2s ease-in-out;
     align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .new-item-form button[type="submit"]:hover {
-    background-color: #333;
+    background-color: var(--farm-green-hover);
 }
 
 /* ── Continue button ── */
 .continue-btn {
-    background-color: #1a1a1a;
+    background-color: var(--farm-green);
     color: white;
     border: none;
     padding: 0.65em 1.6em;
-    border-radius: 50px;
+    border-radius: var(--radius-btn);
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     font-family: var(--brand-sans);
     width: 100%;
     transition: background-color 0.2s ease-in-out;
     margin-top: 0.4em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .continue-btn:hover {
-    background-color: #333;
+    background-color: var(--farm-green-hover);
 }

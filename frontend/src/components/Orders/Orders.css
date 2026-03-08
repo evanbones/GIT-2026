@@ -1,24 +1,28 @@
 .orders-container {
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 16px;
+    background-color: var(--farm-card);
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
     padding: 1.5em;
     font-family: var(--brand-sans);
     min-width: 280px;
     max-width: 360px;
     text-align: left;
+    box-shadow: 0 3px 0 var(--farm-border-light);
 }
 
 .orders-container h1 {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     margin: 0 0 1em 0;
-    color: #1a1a1a;
+    color: var(--text-color);
+    border-bottom: var(--border-thick) solid var(--farm-border-light);
+    padding-bottom: 0.5em;
 }
 
 .order-card {
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: 1px solid var(--farm-border-light);
+    border-left: 4px solid var(--farm-green);
+    border-radius: var(--radius-sm);
     padding: 0.6em 1em;
     margin-bottom: 0.6em;
     display: flex;
@@ -33,36 +37,39 @@
 }
 
 .order-name {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1rem;
-    color: #1a1a1a;
+    color: var(--text-color);
     margin: 0;
 }
 
 .order-status {
-    font-size: 0.85rem;
-    font-weight: 500;
-    padding: 0.3em 0.8em;
-    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.25em 0.7em;
+    border-radius: var(--radius-sm);
     margin: 0;
-    text-transform: capitalize;
+    text-transform: uppercase;
     font-family: var(--brand-sans);
+    letter-spacing: 0.03em;
 }
 
 .order-status.pending {
     background-color: #fff3e0;
-    color: #e65100;
+    color: #c1694f;
+    border: 1px solid #c1694f;
 }
 
 .order-status.completed {
     background-color: #e8f5e9;
-    color: #2e7d32;
+    color: #4a7c59;
+    border: 1px solid #4a7c59;
 }
 
 .order-cost {
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1rem;
-    color: #1a1a1a;
+    color: var(--text-color);
     margin: 0;
     white-space: nowrap;
 }
