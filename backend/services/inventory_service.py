@@ -1,4 +1,5 @@
 from database import db
+from models.catalog import Item, Price
 from models.inventory import Inventory, Stock
 
 
@@ -76,3 +77,84 @@ def delete_stock(stock_id):
     db.session.delete(stock)
     db.session.commit()
     return True
+
+
+def _serialize_item_with_prices(item):
+    return {
+        "id": item.id,
+        "name": item.name,
+        "description": item.description,
+        "sku": item.sku,
+        "unit_type": item.unit_type,
+        "prices": [
+            {
+                "id": p.id,
+                "min_quantity": p.min_quantity,
+                "max_quantity": p.max_quantity,
+                "price_per_unit": float(p.price_per_unit),
+            }
+            for p in item.prices
+        ],
+    }
+
+
+def get_inventory_stocks(inventory_id):
+    stocks = (
+        db.session.query(Stock)
+        .filter(Stock.inventory_id == inventory_id)
+        .join(Item, Stock.item_id == Item.id)
+        .all()
+    )
+    return [
+        {
+            "stock_id": s.id,
+            "quantity": float(s.quantity),
+            "batch_number": s.batch_number,
+            "expiration_date": str(s.expiration_date) if s.expiration_date else None,
+            "item": _serialize_item_with_prices(s.item),
+        }
+        for s in stocks
+    ]
+
+
+def get_inventory_items(inventory_id):
+    rows = (
+        db.session.query(Item, db.func.sum(Stock.quantity).label("total_quantity"))
+        .join(Stock, Item.id == Stock.item_id)
+        .filter(Stock.inventory_id == inventory_id)
+        .group_by(Item.id)
+        .all()
+    )
+    return [
+        {
+            **_serialize_item_with_prices(item),
+            "total_quantity": float(total),
+        }
+        for item, total in rows
+    ]
+
+
+def get_item_stock_across_inventories(item_id):
+    item = db.session.get(Item, item_id)
+    if not item:
+        return None
+    stocks = (
+        db.session.query(Stock, Inventory)
+        .join(Inventory, Stock.inventory_id == Inventory.id)
+        .filter(Stock.item_id == item_id)
+        .all()
+    )
+    return {
+        "item": _serialize_item_with_prices(item),
+        "stocks": [
+            {
+                "stock_id": s.id,
+                "quantity": float(s.quantity),
+                "batch_number": s.batch_number,
+                "expiration_date": str(s.expiration_date) if s.expiration_date else None,
+                "inventory_id": inv.id,
+                "retailer_id": inv.retailer_id,
+            }
+            for s, inv in stocks
+        ],
+    }
