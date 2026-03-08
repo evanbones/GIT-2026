@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/useAuth';
 
-function PrivateRoute({ children, allowedRoles = null, redirectTo = '/sign-in' }) {
+function PrivateRoute({ children, allowedRoles = null, redirectTo = '/login' }) {
   const { user, loading, isAuthenticated } = useAuth();
 
   if (loading) return <div>Loading...</div>;
@@ -9,7 +9,7 @@ function PrivateRoute({ children, allowedRoles = null, redirectTo = '/sign-in' }
   if (!isAuthenticated) return <Navigate to={redirectTo} replace />;
 
   if (allowedRoles && !allowedRoles.includes(user.user_type)) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;
