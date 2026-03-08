@@ -1,10 +1,13 @@
 import logging
 import os
 
-from flask import Blueprint, jsonify, redirect, session, url_for
+from flask import Blueprint, jsonify, redirect, request, session, url_for
+from sqlalchemy import text
 
 from config.oauth import oauth
-from models.user import User
+from database import db
+from models.inventory import Inventory
+from models.user import Producer, Retailer, User
 
 logger = logging.getLogger(__name__)
 
@@ -36,12 +39,7 @@ def callback():
             picture=user_info.get("picture"),
         )
 
-        session["user"] = {
-            "id": user.id,
-            "email": user.email,
-            "picture": user.picture,
-            "user_type": user.user_type,
-        }
+        session["user"] = {**user.to_dict(), "picture": user.picture}
         session["authenticated"] = True
 
         frontend_url = os.environ.get("CORS_ORIGINS", "http://localhost:5173")
@@ -58,6 +56,52 @@ def callback():
 def logout():
     session.clear()
     return jsonify({"success": True})
+
+
+@auth_bp.route("/onboard", methods=["POST"])
+def onboard():
+    if not session.get("authenticated"):
+        return jsonify({"error": "Not authenticated"}), 401
+
+    data = request.get_json()
+    user_type = data.get("user_type", "").lower()
+    company_name = data.get("company_name", "").strip()
+    address = data.get("address", "").strip()
+    description = data.get("description", "").strip()
+
+    if user_type not in ("producer", "retailer"):
+        return jsonify({"error": "user_type must be producer or retailer"}), 400
+    if not company_name:
+        return jsonify({"error": "company_name is required"}), 400
+    if not address:
+        return jsonify({"error": "address is required"}), 400
+
+    user_id = session["user"]["id"]
+
+    # Remove the existing consumer row and update the base user type
+    db.session.execute(text("DELETE FROM consumers WHERE id = :id"), {"id": user_id})
+    db.session.execute(text("UPDATE users SET user_type = :ut WHERE id = :id"), {"ut": user_type, "id": user_id})
+
+    if user_type == "producer":
+        db.session.execute(
+            text("INSERT INTO producers (id, company_name, primary_address, description) VALUES (:id, :cn, :addr, :desc)"),
+            {"id": user_id, "cn": company_name, "addr": address, "desc": description or None},
+        )
+        db.session.flush()
+        db.session.add(Inventory(producer_id=user_id))
+    else:
+        db.session.execute(
+            text("INSERT INTO retailers (id, company_name, store_address) VALUES (:id, :cn, :addr)"),
+            {"id": user_id, "cn": company_name, "addr": address},
+        )
+
+    db.session.commit()
+
+    user = db.session.get(User, user_id)
+    db.session.refresh(user)
+    session["user"] = {**user.to_dict(), "picture": user.picture}
+
+    return jsonify({"user": session["user"]}), 200
 
 
 @auth_bp.route("/user")

@@ -55,7 +55,18 @@ class Producer(User):
     company_description = db.Column("description", db.Text)
     images = db.Column(db.LargeBinary)
 
+    inventory = db.relationship("Inventory", backref="producer_user", uselist=False, foreign_keys="Inventory.producer_id")
+
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}
+
+    def to_dict(self):
+        return {
+            **super().to_dict(),
+            "company_name": self.company_name,
+            "primary_address": self.primary_address,
+            "company_description": self.company_description,
+            "inventory_id": self.inventory.id if self.inventory else None,
+        }
 
 
 class Retailer(User):
@@ -66,6 +77,13 @@ class Retailer(User):
     images = db.Column(db.LargeBinary)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "retailer"}
+
+    def to_dict(self):
+        return {
+            **super().to_dict(),
+            "company_name": self.company_name,
+            "store_address": self.store_address,
+        }
 
 
 class Consumer(User):

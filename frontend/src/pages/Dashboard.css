@@ -4,8 +4,8 @@
     min-height: 100vh;
 }
 
-.dashboard-bottom-left {
-    position: fixed;
-    bottom: 24px;
-    left: 24px;
+.dashboard-content {
+    padding-top: 1rem;
+    background: #faf6ef;
+    min-height: calc(100vh - 60px);
 }
