@@ -11,7 +11,7 @@ export default function Clippy() {
             />
             <div className="clippy-bubble">
                 <p className="clippy-greeting">
-                    👋 Hi there! Need help navigating <strong>GRAEME</strong>?
+                    👋 Hi there! Need help navigating <strong>Town Square</strong>?
                 </p>
                 <ul className="clippy-tips">
                     <li>Browse local producers on the <a href="/map">Map</a></li>
