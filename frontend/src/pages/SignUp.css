@@ -5,67 +5,74 @@
 }
 
 .signup-form {
-    margin: auto; /* Centers the form in the space below the header */
+    margin: auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: 1px solid black;
-    border-radius: 16px;
-    background-color: white;
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--farm-card);
     padding: 2em;
     font-family: var(--brand-sans);
     gap: 1em;
     width: 100%;
     max-width: 360px;
+    box-shadow: 0 3px 0 var(--farm-border-light);
 }
 
 .signup-form h2 {
-    margin: 0 0 0.2em 0;
+    margin: 0 0 0.4em 0;
     font-family: var(--brand-serif);
     font-size: 1.5rem;
-    color: #1a1a1a;
+    color: var(--text-color);
+    border-bottom: var(--border-thick) solid var(--farm-border-light);
+    padding-bottom: 0.3em;
+    width: 100%;
 }
 
 .signup-form input[type="text"],
 .signup-form input[type="password"] {
     width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    border: var(--border-thick) solid var(--farm-border-light);
+    border-radius: var(--radius-sm);
     padding: 0.6em 1em;
     font-size: 1rem;
     font-family: var(--brand-sans);
-    color: #1a1a1a;
+    color: var(--text-color);
     box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s ease-in-out;
+    background-color: var(--farm-card);
 }
 
 .signup-form input[type="text"]:focus,
 .signup-form input[type="password"]:focus {
-    border-color: #1a1a1a;
+    border-color: var(--farm-green);
 }
 
 .signup-form button {
-    background-color: #1a1a1a;
+    background-color: var(--farm-green);
     color: white;
     border: none;
     padding: 0.6em 1.6em;
-    border-radius: 50px;
+    border-radius: var(--radius-btn);
     cursor: pointer;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     font-family: var(--brand-sans);
     transition: background-color 0.2s ease-in-out;
     align-self: flex-end;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 .signup-form button:hover {
-    background-color: #333;
+    background-color: var(--farm-green-hover);
 }
 
 .signup-error {
-    color: #e53935;
+    color: #c1694f;
     font-size: 0.9rem;
     margin: 0;
-    font-weight: 500;
+    font-weight: 600;
 }
