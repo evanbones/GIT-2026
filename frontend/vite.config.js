@@ -11,6 +11,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    allowedHosts: ['townsquare.mom', '*.townsquare.mom'],
     proxy: {
       '/api': {
         target: 'http://backend:8000',
