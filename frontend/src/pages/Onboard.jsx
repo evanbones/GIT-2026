@@ -5,7 +5,7 @@ import Header from "../components/Header/Header.jsx";
 import './Onboard.css';
 import Inventory from '../components/Inventory/Inventory.jsx';
 
-export default function Onboard({ account, setAccount }) {
+export default function Onboard() {
     const navigate = useNavigate();
     const [visible, setVisible] = useState(true);
 
@@ -30,7 +30,7 @@ export default function Onboard({ account, setAccount }) {
         <div className="onboard-page">
             {visible &&
                 <div>
-                    <Header account={account} setAccount={setAccount} />
+                    <Header />
                     <form className="onboard-form" onSubmit={submitBasicOnboard}>
                         <h2>Set Up Your Business</h2>
                         <input
