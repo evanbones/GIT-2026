@@ -57,6 +57,12 @@ class Producer(User):
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}
 
+    def to_dict(self):
+        data = super().to_dict()
+        data["company_name"] = self.company_name
+        data["primary_address"] = self.primary_address
+        return data
+
 
 class Retailer(User):
     __tablename__: ClassVar[str] = "retailers"
@@ -67,6 +73,12 @@ class Retailer(User):
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "retailer"}
 
+    def to_dict(self):
+        data = super().to_dict()
+        data["company_name"] = self.company_name
+        data["store_address"] = self.store_address
+        return data
+
 
 class Consumer(User):
     __tablename__: ClassVar[str] = "consumers"
@@ -76,3 +88,10 @@ class Consumer(User):
     shipping_address = db.Column(db.Text, nullable=True)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "consumer"}
+
+    def to_dict(self):
+        data = super().to_dict()
+        data["first_name"] = self.first_name
+        data["last_name"] = self.last_name
+        data["shipping_address"] = self.shipping_address
+        return data
