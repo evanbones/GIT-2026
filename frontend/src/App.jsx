@@ -7,6 +7,7 @@ import SignUp from "./pages/SignUp.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import MapView from "./pages/MapView.jsx";
 import Onboard from "./pages/Onboard.jsx"
+import Clippy from "./components/Clippy/Clippy.jsx";
 
 function App() {
   const [account, setAccount] = useState(false);
@@ -16,13 +17,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home account={account} setAccount={setAccount} />} />
-          <Route path="/dashboard" element={account ? <Dashboard account={account} setAccount={setAccount}/> : <Navigate to="/sign-in" />} />
+          <Route path="/dashboard" element={account ? <Dashboard account={account} setAccount={setAccount} /> : <Navigate to="/sign-in" />} />
           <Route path="/sign-up" element={<SignUp setAccount={setAccount} />} />
           <Route path="/sign-in" element={<SignIn setAccount={setAccount} />} />
           <Route path="/onboard" element={<Onboard account={account} />} />
           <Route path="/map" element={<MapView />} />
         </Routes>
       </BrowserRouter>
+      <Clippy />
     </>
   );
 }
