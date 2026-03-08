@@ -5,10 +5,7 @@ from models.inventory import Inventory, Stock
 
 def get_all_inventories():
     inventories = Inventory.query.all()
-    return [
-        {"id": i.id, "producer_id": i.producer_id, "last_updated": str(i.last_updated)}
-        for i in inventories
-    ]
+    return [{"id": i.id, "producer_id": i.producer_id, "last_updated": str(i.last_updated)} for i in inventories]
 
 
 def get_inventory(inventory_id):
@@ -74,7 +71,6 @@ def create_stock(data):
     if not db.session.get(Inventory, inventory_id):
         raise ValueError(f"Inventory {inventory_id} does not exist")
 
-    # Resolve item — accept existing item_id or create a new item inline
     item_id = data.get("item_id")
     if item_id:
         item = db.session.get(Item, item_id)
@@ -224,9 +220,7 @@ def get_item_stock_across_inventories(item_id):
                 "stock_id": s.id,
                 "quantity": float(s.quantity),
                 "batch_number": s.batch_number,
-                "expiration_date": (
-                    str(s.expiration_date) if s.expiration_date else None
-                ),
+                "expiration_date": (str(s.expiration_date) if s.expiration_date else None),
                 "inventory_id": inv.id,
                 "producer_id": inv.producer_id,
             }
