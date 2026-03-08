@@ -17,6 +17,6 @@ class Price(db.Model):
     __tablename__ = "prices"
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey("items.id", ondelete="CASCADE"), nullable=False)
-    min_quantity = db.Column(db.Integer)
+    min_quantity = db.Column(db.Integer, nullable=False)
     max_quantity = db.Column(db.Integer)
     price_per_unit = db.Column(db.Numeric(10, 2), nullable=False)

@@ -14,6 +14,8 @@ class User(db.Model):
     picture = db.Column(db.String(512), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_type = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text)
+    profile_photo = db.Column(db.LargeBinary)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_on": user_type, "polymorphic_identity": "user"}
 
@@ -49,6 +51,8 @@ class Producer(User):
     __tablename__: ClassVar[str] = "producers"
     id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     company_name = db.Column(db.String(255), nullable=False)
+    primary_address = db.Column(db.Text, nullable=False)
+    images = db.Column(db.LargeBinary)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}
 
@@ -57,6 +61,8 @@ class Retailer(User):
     __tablename__: ClassVar[str] = "retailers"
     id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     company_name = db.Column(db.String(255), nullable=False)
+    store_address = db.Column(db.Text, nullable=False)
+    images = db.Column(db.LargeBinary)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "retailer"}
 
@@ -64,8 +70,8 @@ class Retailer(User):
 class Consumer(User):
     __tablename__: ClassVar[str] = "consumers"
     id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
-    first_name = db.Column(db.String(255), nullable=True)
+    first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=True)
-    shipping_address = db.Column(db.String(512), nullable=True)
+    shipping_address = db.Column(db.Text, nullable=True)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "consumer"}
