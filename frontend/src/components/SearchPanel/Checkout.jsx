@@ -56,12 +56,16 @@ const Checkout = ({ stock, producer, mode, groupBuy, user, onClose, onSuccess })
           pledged_quantity: quantity,
         });
       } else {
-        await b2bAPI.createGroupBuy({
+        const gbResult = await b2bAPI.createGroupBuy({
           initiator_retailer_id: user?.id,
           item_id: stock?.item?.id,
           target_quantity: targetQuantity,
           deadline,
           status: "open",
+        });
+        await b2bAPI.joinGroupBuy(gbResult.group_buy.id, {
+          retailer_id: user?.id,
+          pledged_quantity: quantity,
         });
       }
       await inventoryAPI.updateStock(stock.stock_id, { quantity_delta: -quantity });

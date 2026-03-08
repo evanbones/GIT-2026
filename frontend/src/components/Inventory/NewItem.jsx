@@ -87,10 +87,9 @@ export default function NewItem({ onAdd, onDelete, inventoryId, producerId, stoc
                 <div className="field-labeled">
                     <label className="field-label">Item Name {!isEdit && '*'}</label>
                     <input
-                        type="text" required
+                        type="text" required={!isEdit}
                         value={name} onChange={e => setName(e.target.value)}
-                        readOnly={isEdit}
-                        className={isEdit ? 'field-readonly' : ''}
+                        disabled={isEdit}
                     />
                 </div>
                 <div className="stock-fields">
@@ -111,8 +110,7 @@ export default function NewItem({ onAdd, onDelete, inventoryId, producerId, stoc
                         <input
                             type="text"
                             value={sku} onChange={e => setSku(e.target.value)}
-                            readOnly={isEdit}
-                            className={isEdit ? 'field-readonly' : ''}
+                            disabled={isEdit}
                         />
                     </div>
                 </div>
@@ -121,8 +119,7 @@ export default function NewItem({ onAdd, onDelete, inventoryId, producerId, stoc
                     <textarea
                         rows={2}
                         value={description} onChange={e => setDescription(e.target.value)}
-                        readOnly={isEdit}
-                        className={isEdit ? 'field-readonly' : ''}
+                        disabled={isEdit}
                     />
                 </div>
 
@@ -170,21 +167,18 @@ export default function NewItem({ onAdd, onDelete, inventoryId, producerId, stoc
                                 type="number" placeholder="0" min="0" step="any"
                                 required={!isEdit}
                                 value={p.min_quantity} onChange={e => updatePrice(i, 'min_quantity', e.target.value)}
-                                readOnly={isEdit}
-                                className={isEdit ? 'field-readonly' : ''}
+                                disabled={isEdit}
                             />
                             <input
                                 type="number" placeholder="—" min="0" step="any"
                                 value={p.max_quantity} onChange={e => updatePrice(i, 'max_quantity', e.target.value)}
-                                readOnly={isEdit}
-                                className={isEdit ? 'field-readonly' : ''}
+                                disabled={isEdit}
                             />
                             <input
                                 type="number" placeholder="0.00" min="0" step="0.01"
                                 required={!isEdit}
                                 value={p.price_per_unit} onChange={e => updatePrice(i, 'price_per_unit', e.target.value)}
-                                readOnly={isEdit}
-                                className={isEdit ? 'field-readonly' : ''}
+                                disabled={isEdit}
                             />
                             {!isEdit && priceTiers.length > 1 && (
                                 <button

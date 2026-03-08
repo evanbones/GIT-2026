@@ -124,9 +124,11 @@ def create_stock(data):
     db.session.commit()
 
     return {
-        "id": stock.id,
+        "stock_id": stock.id,
         "inventory_id": stock.inventory_id,
         "quantity": float(stock.quantity),
+        "batch_number": stock.batch_number,
+        "expiration_date": str(stock.expiration_date) if stock.expiration_date else None,
         "item": _serialize_item_with_prices(item),
     }
 

@@ -455,6 +455,15 @@
     box-sizing: border-box;
 }
 
+.new-item-form input:disabled,
+.new-item-form textarea:disabled,
+.new-item-form select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--farm-bg, #faf6ef);
+    color: var(--farm-text-muted, #7a5c3e);
+}
+
 .field-label {
     font-size: 0.7rem;
     font-weight: 700;
