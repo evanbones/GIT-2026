@@ -1,3 +1,4 @@
+from .auth import auth_bp
 from .b2b import b2b_ns
 from .catalog import catalog_ns
 from .inventory import inventory_ns
