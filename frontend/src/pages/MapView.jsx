@@ -59,31 +59,32 @@ export default function MapView() {
     });
 
     return (
-        <div style={{ height: "100vh", display: "flex", flexDirection: "column", backgroundColor: "#faf6ef" }}>
-            <Header />
-            <main style={{ display: "flex", flex: 1, overflow: "hidden", position: "relative" }}>
-                {/* Search & Results Sidebar */}
-                <SearchSidebar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    distributors={filteredProducers}
-                    onSelect={(dist) => setSelectedDistributor(dist)}
+        <div style={{ height: "100vh", width: "100vw", display: "flex", overflow: "hidden", backgroundColor: "#faf6ef" }}>
+            
+            <SearchSidebar
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                distributors={filteredProducers}
+                onSelect={(dist) => setSelectedDistributor(dist)}
+            />
+
+            {/* Distributor Detail: Also spans full height if active */}
+            {selectedDistributor && (
+                <DistributorDetail
+                    distributor={selectedDistributor}
+                    onClose={() => setSelectedDistributor(null)}
+                    onOrder={(product, dist, mode) => setCheckoutInfo({ product, distributor: dist, mode })}
                 />
+            )}
 
-                {/* Distributor Detail Panel */}
-                {selectedDistributor && (
-                    <DistributorDetail
-                        distributor={selectedDistributor}
-                        onClose={() => setSelectedDistributor(null)}
-                        onOrder={(product, dist, mode) => setCheckoutInfo({ product, distributor: dist, mode })}
-                    />
-                )}
-
-                {/* Map */}
-                <div style={{ flex: 1, position: "relative" }}>
-                    <Map pins={filteredProducers} selectedId={selectedDistributor?.id} />
+            {/* Main Area */}
+            <div style={{ flex: 1, position: "relative", height: "100%" }}>
+                <div style={{ position: "absolute", top: 0, left: 0, width: "100%", zIndex: 1000 }}>
+                    <Header />
                 </div>
-            </main>
+                
+                <Map pins={filteredProducers} selectedId={selectedDistributor?.id} />
+            </div>
 
             {/* Checkout Overlay */}
             {checkoutInfo && (
