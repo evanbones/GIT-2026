@@ -61,6 +61,7 @@
 .hero-actions {
     display: flex;
     gap: 1rem;
+    text-align: center;
     justify-content: center;
     flex-wrap: wrap;
 }
@@ -100,7 +101,7 @@
 .btn-secondary {
     background-color: transparent;
     color: var(--text-color);
-    border: var(--border-thick) solid var(--farm-border);
+    border: var(--border-thick);
 }
 
 .btn-secondary:hover {
