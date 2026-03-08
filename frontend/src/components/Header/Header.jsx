@@ -1,22 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
+import { useAuth } from "../../contexts/AuthContext.jsx";
 
 function Header({ account, setAccount }) {
-  // Simulates logging out by resetting the account state
-  const handleSignOut = (e) => {
-    e.preventDefault();
-    setAccount(false);
-  };
-
+  const { isAuthenticated, signOut, user } = useAuth();
   let links;
 
   if (account) {
     links = (
       <div className="links">
-        <Link to="/map">Map</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        <a href="/" onClick={handleSignOut}>Sign Out</a>
+        <a href="/map">Browse</a>
+        <a href="/dashboard">Dashboard</a>
+        <button onClick={signOut} className="link-btn">
+          {user?.picture && <img src={user.picture} alt="" className="nav-avatar" />}
+          Sign Out
+        </button>
       </div>
     );
   } else {
