@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../contexts/AuthContext';
+import Header from "../components/Header/Header.jsx"
+
 import './SignIn.css';
 
-function SignIn({ setAccount }) {
+function SignIn({ account, setAccount }) {
+
     const navigate = useNavigate();
     const { login: googleLogin, checkAuthStatus } = useAuth();
     const [error, setError] = useState("");
@@ -48,6 +51,7 @@ function SignIn({ setAccount }) {
 
     return (
         <div className="signin-page">
+            <Header account={account} setAccount={setAccount} />
             <form className="signin-form" onSubmit={login}>
                 <h2>Sign In</h2>
                 <input type="text" placeholder="Email" value={email}

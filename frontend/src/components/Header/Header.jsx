@@ -10,7 +10,7 @@ function Header({ account, setAccount }) {
   if (isAuthenticated) {
     links = (
       <div className="links">
-        <a href="/map">Map</a>
+        <a href="/map">Browse</a>
         <a href="/dashboard">Dashboard</a>
         <button onClick={signOut} className="link-btn">Sign Out</button>
       </div>
