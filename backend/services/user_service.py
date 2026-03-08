@@ -18,6 +18,7 @@ def get_all_users(user_type=None):
     """
     if user_type == "producer":
         users = Producer.query.options(selectinload(Producer.items).selectinload(Item.prices)).all()
+        return [u.to_dict() for u in users]
     elif user_type == "retailer":
         users = Retailer.query.all()
     elif user_type == "consumer":

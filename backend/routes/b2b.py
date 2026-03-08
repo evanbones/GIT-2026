@@ -71,8 +71,9 @@ class GroupBuyDetail(Resource):
 @b2b_ns.route("/offers")
 class OfferList(Resource):
     def get(self):
-        """List all direct B2B stock offers."""
-        return {"offers": get_all_offers()}, 200
+        """List direct B2B stock offers, optionally filtered by producer_id."""
+        producer_id = request.args.get("producer_id", type=int)
+        return {"offers": get_all_offers(producer_id=producer_id)}, 200
 
     def post(self):
         """Submit a new offer from a retailer to a producer."""

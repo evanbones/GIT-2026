@@ -39,10 +39,18 @@ export const inventoryAPI = {
 };
 
 export const ordersAPI = {
-    getAll: () => apiCall('/orders'),
+    getAll: (retailerId) => apiCall(`/orders${retailerId ? `?retailer_id=${retailerId}` : ''}`),
     getOne: (id) => apiCall(`/orders/${id}`),
     create: (data) => apiCall('/orders', { method: 'POST', body: JSON.stringify(data) }),
     updateStatus: (id, status) => apiCall(`/orders/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+};
+
+export const b2bAPI = {
+    createOffer: (data) => apiCall('/b2b/offers', { method: 'POST', body: JSON.stringify(data) }),
+    createGroupBuy: (data) => apiCall('/b2b/group-buys', { method: 'POST', body: JSON.stringify(data) }),
+    getOffers: (producerId) => apiCall(`/b2b/offers${producerId ? `?producer_id=${producerId}` : ''}`),
+    updateOffer: (id, status) => apiCall(`/b2b/offers/${id}`, { method: 'PUT', body: JSON.stringify({ status }) }),
+    getGroupBuys: () => apiCall('/b2b/group-buys'),
 };
 
 export const usersAPI = {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../../contexts/useAuth';
-import { inventoryAPI } from '../../utils/api';
+import { inventoryAPI, b2bAPI } from '../../utils/api';
 import Inventory from '../Inventory/Inventory';
 import NewItem from '../Inventory/NewItem';
 import StockRow from '../Inventory/StockRow';
@@ -16,6 +16,7 @@ export default function ProducerDashboard() {
     const [modal, setModal] = useState(false);
     const [modalView, setModalView] = useState('inventory');
     const [editingStock, setEditingStock] = useState(null);
+    const [offers, setOffers] = useState([]);
 
     useEffect(() => {
         if (!user?.inventory_id) return;
@@ -24,6 +25,19 @@ export default function ProducerDashboard() {
             .catch(e => setError(e.message))
             .finally(() => setLoading(false));
     }, [user]);
+
+    useEffect(() => {
+        if (!user?.id) return;
+        b2bAPI.getOffers(user.id)
+            .then(data => setOffers(data.offers || []))
+            .catch(() => {});
+    }, [user]);
+
+    const handleOfferAction = (offerId, status) => {
+        b2bAPI.updateOffer(offerId, status)
+            .then(() => setOffers(prev => prev.map(o => o.id === offerId ? { ...o, status } : o)))
+            .catch(() => {});
+    };
 
     const totalItems = stocks.length;
     const lowStock = stocks.filter(s => s.quantity < 10);
@@ -87,6 +101,41 @@ export default function ProducerDashboard() {
                             ))}
                         </div>
                     )}
+                </div>
+            )}
+
+            {offers.length > 0 && (
+                <div className="dashboard-section">
+                    <div className="section-header">
+                        <h2>Incoming Offers</h2>
+                    </div>
+                    <div className="stock-list">
+                        <div className="offer-row offer-row-header">
+                            <span>Retailer</span>
+                            <span>Item</span>
+                            <span>Qty</span>
+                            <span>Offered Price</span>
+                            <span>Status</span>
+                            <span></span>
+                        </div>
+                        {offers.map(o => (
+                            <div key={o.id} className="offer-row">
+                                <span>{o.retailer_name || `Retailer #${o.retailer_id}`}</span>
+                                <span>{o.item_name || `Item #${o.item_id}`}</span>
+                                <span>{o.requested_quantity} {o.item_unit}</span>
+                                <span>${parseFloat(o.offered_price).toFixed(2)}</span>
+                                <span className={`offer-status offer-status--${o.status}`}>{o.status}</span>
+                                <span className="offer-actions">
+                                    {o.status === 'pending' && (
+                                        <>
+                                            <button className="btn-accept" onClick={() => handleOfferAction(o.id, 'accepted')}>Accept</button>
+                                            <button className="btn-reject" onClick={() => handleOfferAction(o.id, 'rejected')}>Reject</button>
+                                        </>
+                                    )}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             )}
 

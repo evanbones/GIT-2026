@@ -34,10 +34,9 @@ order_update_model = orders_ns.model(
 @orders_ns.route("")
 class OrderList(Resource):
     def get(self):
-        """
-        List all inventory orders.
-        """
-        return {"orders": get_all_orders()}, 200
+        """List all inventory orders, optionally filtered by retailer_id."""
+        retailer_id = request.args.get("retailer_id", type=int)
+        return {"orders": get_all_orders(retailer_id=retailer_id)}, 200
 
     @orders_ns.expect(order_model)
     def post(self):

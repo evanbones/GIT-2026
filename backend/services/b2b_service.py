@@ -1,5 +1,7 @@
 from database import db
 from models.b2b import BuyStockOffer, GroupBuy
+from models.catalog import Item
+from models.user import Retailer
 
 
 def get_all_group_buys():
@@ -55,11 +57,28 @@ def delete_group_buy(gb_id):
     return True
 
 
-def get_all_offers():
-    offers = BuyStockOffer.query.all()
-    return [
-        {"id": o.id, "retailer_id": o.retailer_id, "producer_id": o.producer_id, "status": o.status} for o in offers
-    ]
+def _serialize_offer(o):
+    retailer = db.session.get(Retailer, o.retailer_id)
+    item = db.session.get(Item, o.item_id)
+    return {
+        "id": o.id,
+        "retailer_id": o.retailer_id,
+        "retailer_name": retailer.company_name if retailer else None,
+        "producer_id": o.producer_id,
+        "item_id": o.item_id,
+        "item_name": item.name if item else None,
+        "item_unit": item.unit_type if item else None,
+        "offered_price": float(o.offered_price),
+        "requested_quantity": float(o.requested_quantity),
+        "status": o.status,
+    }
+
+
+def get_all_offers(producer_id=None):
+    q = BuyStockOffer.query
+    if producer_id is not None:
+        q = q.filter(BuyStockOffer.producer_id == producer_id)
+    return [_serialize_offer(o) for o in q.all()]
 
 
 def get_offer(offer_id):

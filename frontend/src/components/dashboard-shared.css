@@ -1,0 +1,148 @@
+/* ── Shared dashboard layout ── */
+.producer-dashboard,
+.retailer-dashboard {
+    padding: 2rem;
+    max-width: 98vw;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    font-family: 'Playfair Display', serif;
+    color: #3e2f1c;
+    margin: 0 0 0.25rem;
+}
+
+.dashboard-subtitle {
+    color: #7a5c3e;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ── Stats ── */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: #fff;
+    border: 1px solid #d4c4a8;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-card.warn {
+    border-color: #c1694f;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #3e2f1c;
+    font-family: 'Playfair Display', serif;
+}
+
+.stat-card.warn .stat-number {
+    color: #c1694f;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #7a5c3e;
+}
+
+/* ── Section ── */
+.dashboard-section {
+    background: #fff;
+    border: 1px solid #d4c4a8;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.section-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: #3e2f1c;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+/* ── Shared row list ── */
+.row-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
+}
+
+/* ── Empty / loading / error ── */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #7a5c3e;
+}
+
+.dashboard-loading,
+.dashboard-error {
+    text-align: center;
+    padding: 2rem;
+    color: #7a5c3e;
+}
+
+.dashboard-error {
+    color: #c1694f;
+}
+
+/* ── Buttons ── */
+.btn-primary {
+    background: #4a7c59;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #3a6347;
+}
+
+.modal-back-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #7a5c3e;
+    font-size: 0.9rem;
+    font-family: var(--brand-sans);
+    padding: 0;
+    margin-bottom: 0.8em;
+}
+
+.modal-back-btn:hover {
+    color: #3e2f1c;
+}
