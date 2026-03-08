@@ -47,16 +47,73 @@ def get_stock(stock_id):
 
 
 def create_stock(data):
+    inventory_id = data.get("inventory_id")
+    quantity = data.get("quantity")
+
+    if not inventory_id:
+        raise ValueError("inventory_id is required")
+    if quantity is None:
+        raise ValueError("quantity is required")
+    if not db.session.get(Inventory, inventory_id):
+        raise ValueError(f"Inventory {inventory_id} does not exist")
+
+    # Resolve item — accept existing item_id or create a new item inline
+    item_id = data.get("item_id")
+    if item_id:
+        item = db.session.get(Item, item_id)
+        if not item:
+            raise ValueError(f"Item {item_id} does not exist")
+    else:
+        item_data = data.get("item")
+        if not item_data:
+            raise ValueError("Either item_id or item object is required")
+        for field in ("name", "unit_type", "producer_id"):
+            if not item_data.get(field):
+                raise ValueError(f"item.{field} is required")
+
+        prices_data = data.get("prices")
+        if not prices_data:
+            raise ValueError("prices are required when creating a new item")
+        for i, p in enumerate(prices_data):
+            if p.get("min_quantity") is None:
+                raise ValueError(f"prices[{i}].min_quantity is required")
+            if p.get("price_per_unit") is None:
+                raise ValueError(f"prices[{i}].price_per_unit is required")
+
+        item = Item(
+            producer_id=item_data["producer_id"],
+            name=item_data["name"],
+            description=item_data.get("description"),
+            sku=item_data.get("sku"),
+            unit_type=item_data["unit_type"],
+        )
+        db.session.add(item)
+        db.session.flush()
+
+        for p in prices_data:
+            db.session.add(Price(
+                item_id=item.id,
+                min_quantity=p["min_quantity"],
+                max_quantity=p.get("max_quantity"),
+                price_per_unit=p["price_per_unit"],
+            ))
+
     stock = Stock(
-        inventory_id=data.get("inventory_id"),
-        item_id=data.get("item_id"),
-        quantity=data.get("quantity"),
+        inventory_id=inventory_id,
+        item_id=item.id,
+        quantity=quantity,
         batch_number=data.get("batch_number"),
         expiration_date=data.get("expiration_date"),
     )
     db.session.add(stock)
     db.session.commit()
-    return {"id": stock.id, "item_id": stock.item_id, "quantity": float(stock.quantity)}
+
+    return {
+        "id": stock.id,
+        "inventory_id": stock.inventory_id,
+        "quantity": float(stock.quantity),
+        "item": _serialize_item_with_prices(item),
+    }
 
 
 def update_stock(stock_id, data):
