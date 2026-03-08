@@ -24,35 +24,46 @@ export default function Onboard() {
     }
 
     return (
-        <div className="onboard-page">
-            <form className="onboard-form" onSubmit={submitBasicOnboard}>
-                <h2>Set Up Your Business</h2>
-                <input type="text" placeholder="Business Name"
-                    value={name} onChange={(e) => setName(e.target.value)} />
+        // Root container for full height, background image, centering
+        <div className="onboard-page hero-framework"> 
+            
+            {/* Main content container for hero sections/elements */}
+            <div className="hero-content">
 
-                <input type="address" placeholder="Business Address"
-                    value={address} onChange={(e) => setAddress(e.target.value)} />
+                {/* Optional: Simple hero header content can go here */}
+                {/* <h1>Welcome to Graeme's!</h1> */}
+                {/* <p>Set up your profile to connect.</p> */}
 
-                <div className="onboard-radio-group">
-                    <label>
-                        <input type="radio" name="business type" value="Producer"
-                            onClick={(e) => setType(e.target.value)} />
-                        Producer
-                    </label>
-                    <label>
-                        <input type="radio" name="business type" value="Retailer"
-                            onClick={(e) => setType(e.target.value)} />
-                        Retailer
-                    </label>
-                </div>
+                {/* The existing onboarding form */}
+                <form className="onboard-form" onSubmit={submitBasicOnboard}>
+                    <h2>Set Up Your Business</h2>
+                    <input type="text" placeholder="Business Name"
+                        value={name} onChange={(e) => setName(e.target.value)} />
 
-                <input type="text" placeholder="Business Description"
-                    value={description} onChange={(e) => setDescription(e.target.value)} />
-                <input type="text" placeholder="Website link"
-                    value={link} onChange={(e) => setLink(e.target.value)} />
+                    <input type="address" placeholder="Business Address"
+                        value={address} onChange={(e) => setAddress(e.target.value)} />
 
-                <button type="submit">Submit</button>
-            </form>
+                    <div className="onboard-radio-group">
+                        <label>
+                            <input type="radio" name="business type" value="Producer"
+                                onClick={(e) => setType(e.target.value)} />
+                            Producer
+                        </label>
+                        <label>
+                            <input type="radio" name="business type" value="Retailer"
+                                onClick={(e) => setType(e.target.value)} />
+                            Retailer
+                        </label>
+                    </div>
+
+                    <input type="text" placeholder="Business Description"
+                        value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <input type="text" placeholder="Website link"
+                        value={link} onChange={(e) => setLink(e.target.value)} />
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </div>
     )
 
