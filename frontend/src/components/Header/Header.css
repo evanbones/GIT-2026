@@ -1,31 +1,47 @@
 .navbar {
-    background-color: var(--farm-card);
-    border-bottom: var(--border-thick) solid var(--farm-border);
-    padding: 0.8rem 2rem;
+    /* Matching the Onboard Form Card Style */
+    background-color: var(--farm-card, #ffffff);
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
+
+    width: 85%;
+    max-width: 900px;
+    margin: 1rem auto 0;
+    padding: 0.1rem 2rem;
+
     position: sticky;
-    top: 0;
+    top: 1rem;
     z-index: 1000;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-family: var(--brand-sans);
-    box-shadow: 0 2px 0 var(--farm-border-light);
 }
 
-.navbar-brand {
-    font-family: var(--brand-serif);
-    font-size: 1.4rem;
-    color: var(--farm-brown);
+/* --- Logo Container & Image Styling --- */
+.navbar-brand-container {
+    display: flex;
+    align-items: center;
     text-decoration: none;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    transition: opacity 0.2s ease;
 }
 
+.navbar-brand-container:hover {
+    opacity: 0.8;
+}
+
+.navbar-logo {
+    height: 5rem;
+    width: auto;
+    display: block;
+}
+
+/* --- Navigation Links --- */
 .links {
     display: flex;
     align-items: center;
-    gap: 0.3em;
+    gap: 0.4em;
 }
 
 .links a {
@@ -33,15 +49,9 @@
     color: var(--text-color);
     font-size: 0.95rem;
     font-weight: 600;
-    padding: 0.45em 0.9em;
+    padding: 0.4em 0.9em;
     border-radius: var(--radius-btn);
-    border: 1px solid transparent;
     transition: all 0.2s ease-in-out;
-}
-
-.links a:hover {
-    background-color: var(--farm-hover);
-    border-color: var(--farm-border-light);
 }
 
 .link-btn {
@@ -49,7 +59,7 @@
     align-items: center;
     gap: 0.5em;
     background: none;
-    border: 1px solid var(--farm-border-light);
+    border: var(--border-thick) solid var(--farm-border-light);
     color: var(--text-color);
     font-size: 0.95rem;
     font-weight: 600;

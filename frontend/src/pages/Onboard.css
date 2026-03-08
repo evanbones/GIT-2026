@@ -14,7 +14,7 @@
     background-color: var(--farm-card);
     padding: 2.5em 2em;
     font-family: var(--brand-sans);
-    gap: 1em;
+    gap: 1.25em;
     width: 100%;
     max-width: 420px;
     box-shadow: 0 3px 0 var(--farm-border-light);
@@ -54,6 +54,9 @@
     display: flex;
     gap: 1em;
     width: 100%;
+    border-radius: 50px;
+    border: 1px solid #dcd0c0;
+    overflow: hidden;
 }
 
 .onboard-radio-group label {
@@ -70,6 +73,20 @@
     transition: border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
     flex: 1;
     justify-content: center;
+    gap: 0.5em;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #444;
+    cursor: pointer;
+    padding: 0.7em 1.2em;
+    transition: all 0.2s ease-in-out;
+    flex: 1;
+    background-color: #fafafa;
+    border-right: 1px solid #dcd0c0;
+}
+
+.onboard-radio-group label:last-child {
+    border-right: none;
 }
 
 .onboard-radio-group label:hover {
@@ -99,4 +116,8 @@
 
 .onboard-form button:hover {
     background-color: var(--farm-green-hover);
+}
+
+.onboard-form button:active {
+    transform: scale(0.98);
 }

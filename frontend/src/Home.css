@@ -1,0 +1,122 @@
+.home-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+
+    background-image: linear-gradient(rgba(26, 26, 26, 0.2),
+            rgba(26, 26, 26, 0.4)), url('/homepage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.hero-section {
+    width: 100%;
+    min-height: 85vh;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    width: 100%;
+    padding: 4rem 3rem;
+
+    /* Matching the Onboard Form Card Style */
+    background-color: var(--farm-card, #ffffff);
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 4px 0 var(--farm-border-light);
+    /* Flat structural shadow */
+
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.hero-title {
+    font-family: var(--brand-serif);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-family: var(--brand-sans);
+    font-size: 1.2rem;
+    color: #4a4a4a;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    font-family: var(--brand-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.6em 1.6em;
+    border-radius: var(--radius-btn);
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-block;
+}
+
+/* Primary Button uses the Onboard Farm Green */
+.btn-primary {
+    background-color: var(--farm-green);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--farm-green-hover);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    transform: scale(0.98);
+}
+
+/* Secondary button uses the thick farm border */
+.btn-secondary {
+    background-color: transparent;
+    color: var(--text-color);
+    border: var(--border-thick) solid var(--farm-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--farm-hover);
+}
+
+.map-preview-section {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 2rem 4rem;
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

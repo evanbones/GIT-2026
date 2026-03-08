@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 
@@ -6,7 +7,7 @@ function Header({ account, setAccount }) {
   const { isAuthenticated, signOut, user } = useAuth();
   let links;
 
-  if (isAuthenticated) {
+  if (account) {
     links = (
       <div className="links">
         <a href="/map">Browse</a>
@@ -16,19 +17,26 @@ function Header({ account, setAccount }) {
           Sign Out
         </button>
       </div>
-    )
+    );
   } else {
     links = (
       <div className="links">
-        <a href="/map">Map</a>
-        <a href="/sign-in">Log In</a>
+        <Link to="/map">Map</Link>
+        <Link to="/sign-in">Sign In</Link>
+        <Link to="/sign-up">Sign Up</Link>
       </div>
-    )
+    );
   }
 
   return (
     <header className="navbar">
-      <a href="/" className="navbar-brand">GRAEME</a>
+      <Link to="/" className="navbar-brand-container">
+        <img 
+          src="/town-square-icon.png" 
+          alt="Town Square Icon" 
+          className="navbar-logo" 
+        />
+      </Link>
       {links}
     </header>
   );
