@@ -3,7 +3,7 @@ import "./Header.css";
 import { useAuth } from "../../contexts/AuthContext.jsx";
 
 function Header({ account, setAccount }) {
-  const { isAuthenticated, signOut } = useAuth();
+  const { isAuthenticated, signOut, user } = useAuth();
   let links;
 
   if (isAuthenticated) {
@@ -11,7 +11,10 @@ function Header({ account, setAccount }) {
       <div className="links">
         <a href="/map">Browse</a>
         <a href="/dashboard">Dashboard</a>
-        <button onClick={signOut} className="link-btn">Sign Out</button>
+        <button onClick={signOut} className="link-btn">
+          {user?.picture && <img src={user.picture} alt="" className="nav-avatar" />}
+          Sign Out
+        </button>
       </div>
     )
   } else {

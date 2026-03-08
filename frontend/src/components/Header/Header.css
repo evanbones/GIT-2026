@@ -43,3 +43,31 @@
     background-color: var(--farm-hover);
     border-color: var(--farm-border-light);
 }
+
+.link-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background: none;
+    border: 1px solid var(--farm-border-light);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: var(--brand-sans);
+    padding: 0.45em 0.9em;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.link-btn:hover {
+    background-color: var(--farm-hover);
+    border-color: var(--farm-border);
+}
+
+.nav-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+}
