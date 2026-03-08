@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from 'react';
 import "./App.css";
 import Home from "./Home.jsx";
@@ -16,7 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home account={account} setAccount={setAccount} />} />
-          <Route path="/dashboard" element={<Dashboard account={account} setAccount={setAccount} />} />
+          <Route path="/dashboard" element={account ? <Dashboard account={account} setAccount={setAccount}/> : <Navigate to="/sign-in" />} />
           <Route path="/sign-up" element={<SignUp setAccount={setAccount} />} />
           <Route path="/sign-in" element={<SignIn setAccount={setAccount} />} />
           <Route path="/onboard" element={<Onboard account={account} />} />
