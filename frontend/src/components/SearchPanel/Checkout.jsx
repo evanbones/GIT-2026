@@ -4,8 +4,9 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
   const [quantity, setQuantity] = useState(1);
   const [targetQuantity, setTargetQuantity] = useState(50);
   const [step, setStep] = useState("FORM");
+  const [confirmed, setConfirmed] = useState(false);
 
-  {/* Hardocoded quantities for now*/}
+  {/* Hardocoded quantities for now*/ }
   const getUnitPrice = (qty) => {
     if (qty >= 13) return Math.floor(product.basePrice * 0.8);
     if (qty >= 6) return Math.floor(product.basePrice * 0.9);
@@ -15,14 +16,14 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
   const currentUnitPrice = getUnitPrice(quantity);
   const totalPrice = currentUnitPrice * quantity;
 
-  {/* Success message */}
+  {/* Success message */ }
   if (step === "SUCCESS") {
     return (
       <div style={overlayStyle}>
         <div style={modalStyle}>
-          <h2 style={{ fontFamily: "var(--brand-serif)", color: "#1a1a1a", marginBottom: "15px" }}>Order Confirmed</h2>
-          <p style={{ color: "#666", lineHeight: "1.6" }}>
-            Your request for <strong>{quantity} units</strong> of <strong>{product.name}</strong> has been received. 
+          <h2 style={{ fontFamily: "var(--brand-serif)", color: "#3e2f1c", marginBottom: "15px" }}>Order Confirmed</h2>
+          <p style={{ color: "#78695a", lineHeight: "1.6" }}>
+            Your request for <strong>{quantity} units</strong> of <strong>{product.name}</strong> has been received.
             {mode === "GROUP" ? " We'll notify you once the group goal is reached." : ""}
           </p>
           <button onClick={onClose} style={primaryBtnStyle}>Return to Map</button>
@@ -31,32 +32,32 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
     );
   }
 
-  {/* changes window depending on if its a direct purchase or a group order */}
+  {/* changes window depending on if its a direct purchase or a group order */ }
   return (
     <div style={overlayStyle}>
       <div style={modalStyle}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
-          <h3 style={{ fontFamily: "var(--brand-serif)", margin: 0, fontSize: "1.5rem" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px", borderBottom: "2px solid #d4c4a8", paddingBottom: "15px" }}>
+          <h3 style={{ fontFamily: "var(--brand-serif)", margin: 0, fontSize: "1.5rem", color: "#3e2f1c" }}>
             {mode === "DIRECT" ? "Direct Purchase" : "Start Group Order"}
           </h3>
-          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer" }}>✕</button>
+          <button onClick={onClose} style={{ border: "none", background: "none", cursor: "pointer", color: "#7a5c3e", fontSize: "1.1rem" }}>✕</button>
         </div>
 
-        <div style={{ background: "#f9f8f4", padding: "15px", borderRadius: "8px", marginBottom: "25px", border: "1px solid #eee" }}>
-          <span style={{ fontSize: "0.8rem", color: "#999", textTransform: "uppercase" }}>{distributor.name}</span>
-          <h4 style={{ margin: "5px 0 0 0", fontSize: "1.1rem" }}>{product.name}</h4>
+        <div style={{ background: "#faf6ef", padding: "15px", borderRadius: "4px", marginBottom: "25px", border: "2px solid #d4c4a8", borderLeft: "4px solid #4a7c59" }}>
+          <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700, letterSpacing: "0.04em" }}>{distributor.name}</span>
+          <h4 style={{ margin: "5px 0 0 0", fontSize: "1.1rem", color: "#3e2f1c" }}>{product.name}</h4>
         </div>
 
         {mode === "GROUP" && (
           <div style={{ marginBottom: "25px" }}>
             <label style={labelStyle}>Collective Target Quantity</label>
-            <input 
-              type="number" 
-              value={targetQuantity} 
-              onChange={(e) => setTargetQuantity(parseInt(e.target.value))} 
+            <input
+              type="number"
+              value={targetQuantity}
+              onChange={(e) => setTargetQuantity(parseInt(e.target.value))}
               style={inputStyle}
             />
-            <p style={{ fontSize: "0.75rem", color: "#999", marginTop: "8px" }}>
+            <p style={{ fontSize: "0.75rem", color: "#78695a", marginTop: "8px" }}>
               Set the total units needed across all buyers to unlock the max discount tier (${Math.floor(product.basePrice * 0.8)}).
             </p>
           </div>
@@ -64,45 +65,53 @@ const Checkout = ({ product, distributor, mode, onClose }) => {
 
         <div style={{ marginBottom: "25px" }}>
           <label style={labelStyle}>Your Quantity</label>
-          <input 
-            type="number" 
-            min="1" 
-            value={quantity} 
-            onChange={(e) => setQuantity(parseInt(e.target.value) || 0)} 
+          <input
+            type="number"
+            min="1"
+            value={quantity}
+            onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
             style={inputStyle}
           />
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", borderTop: "1px solid #eee", paddingTop: "20px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
+          <input type="checkbox" checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} style={{ margin: 0, flexShrink: 0 }} />
+          <label style={{ fontWeight: 700, fontSize: "0.65rem", textAlign: "left", color: "#3e2f1c", textTransform: "uppercase", letterSpacing: "0.03em" }}>I confirm that I meet all applicable legal and platform requirements to place this order.</label>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", borderTop: "2px solid #d4c4a8", paddingTop: "20px" }}>
           <div>
-            <span style={{ fontSize: "0.8rem", color: "#999" }}>Estimated Total</span>
-            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#1a1a1a" }}>${totalPrice}</div>
+            <span style={{ fontSize: "0.8rem", color: "#7a5c3e", textTransform: "uppercase", fontWeight: 700 }}>Estimated Total</span>
+            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#3e2f1c" }}>${totalPrice}</div>
           </div>
-          <button 
+          <button
             onClick={() => setStep("SUCCESS")}
-            style={primaryBtnStyle}
+            disabled={!confirmed}
+            style={{ ...primaryBtnStyle, ...(confirmed ? {} : { opacity: 0.5, cursor: "not-allowed" }) }}
           >
             Confirm Order
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
 const overlayStyle = {
   position: "fixed", top: 0, left: 0, width: "100%", height: "100%",
-  backgroundColor: "rgba(0,0,0,0.3)", backdropFilter: "blur(4px)",
+  backgroundColor: "rgba(62, 47, 28, 0.4)", backdropFilter: "blur(4px)",
   display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000
 };
 const modalStyle = {
-  background: "white", padding: "40px", borderRadius: "16px", width: "450px", boxShadow: "0 20px 40px rgba(0,0,0,0.1)"
+  background: "#fffdf7", padding: "40px", borderRadius: "8px", width: "450px",
+  boxShadow: "0 6px 0 rgba(122, 92, 62, 0.1)", border: "2px solid #c4a882"
 };
-const labelStyle = { display: "block", marginBottom: "8px", fontWeight: 600, fontSize: "0.85rem", color: "#1a1a1a" };
-const inputStyle = { width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #ddd", fontSize: "1rem", boxSizing: "border-box" };
-const primaryBtnStyle = { 
-  backgroundColor: "#1a1a1a", color: "white", padding: "14px 28px", 
-  borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "0.95rem" 
+const labelStyle = { display: "block", marginBottom: "8px", fontWeight: 700, fontSize: "0.85rem", color: "#3e2f1c", textTransform: "uppercase", letterSpacing: "0.03em" };
+const inputStyle = { width: "100%", padding: "12px", borderRadius: "4px", border: "2px solid #d4c4a8", fontSize: "1rem", boxSizing: "border-box", color: "#3e2f1c", backgroundColor: "#fffdf7" };
+const primaryBtnStyle = {
+  backgroundColor: "#4a7c59", color: "white", padding: "14px 28px",
+  borderRadius: "5px", border: "none", cursor: "pointer", fontWeight: 700, fontSize: "0.95rem",
+  textTransform: "uppercase", letterSpacing: "0.04em"
 };
 
 export default Checkout;

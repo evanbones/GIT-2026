@@ -9,6 +9,7 @@ import SignUp from "./pages/SignUp.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import MapView from "./pages/MapView.jsx";
 import Onboard from "./pages/Onboard.jsx"
+import Clippy from "./components/Clippy/Clippy.jsx";
 
 function App() {
   const [account, setAccount] = useState(false);
@@ -35,6 +36,7 @@ function App() {
           </Routes>
         </AuthProvider>
       </BrowserRouter>
+      <Clippy />
     </>
   );
 }

@@ -1,15 +1,36 @@
 :root {
-  --brand-serif: 'DM Serif Display', serif;
-  --brand-sans: 'Inter', sans-serif;
-  --text-color: #1a1a1a;
+  --brand-serif: 'Playfair Display', serif;
+  --brand-sans: 'Nunito', sans-serif;
+  --text-color: #3e2f1c;
+
+  /* ── Farm palette ── */
+  --farm-green: #4a7c59;
+  --farm-green-hover: #3b6548;
+  --farm-brown: #7a5c3e;
+  --farm-cream: #faf6ef;
+  --farm-card: #fffdf7;
+  --farm-border: #c4a882;
+  --farm-border-light: #d4c4a8;
+  --farm-hover: #f0ead2;
+  --farm-terracotta: #c1694f;
+  --farm-olive: #6b7c3e;
+  --farm-text-muted: #78695a;
+  --farm-shadow: rgba(122, 92, 62, 0.08);
+
+  /* ── Shape tokens ── */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-btn: 5px;
+  --border-thick: 2px;
 }
 
 #root {
   margin: 0 auto;
   text-align: center;
-  font-family: var(--brand-sans); 
+  font-family: var(--brand-sans);
   color: var(--text-color);
-  background-color: #f9f8f4; 
+  background-color: var(--farm-cream);
   min-height: 100vh;
 }
 

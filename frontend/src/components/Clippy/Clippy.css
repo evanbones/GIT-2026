@@ -1,0 +1,108 @@
+/* ── Clippy support pane ── */
+
+.clippy-pane {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: auto;
+  animation: clippy-slide-in 0.5s ease-out both;
+}
+
+/* ── Slide-in entrance ── */
+@keyframes clippy-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Avatar ── */
+.clippy-avatar {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  padding: 6px;
+  background: var(--farm-card, #fffdf7);
+  border: var(--border-thick, 2px) solid var(--farm-border, #c4a882);
+  border-radius: var(--radius-md, 6px);
+  box-shadow: 0 2px 8px var(--farm-shadow, rgba(122, 92, 62, 0.08));
+  animation: clippy-bob 2.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes clippy-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+/* ── Speech bubble ── */
+.clippy-bubble {
+  background: var(--farm-card, #fffdf7);
+  border: var(--border-thick, 2px) solid var(--farm-border, #c4a882);
+  border-radius: var(--radius-lg, 8px);
+  padding: 14px 16px;
+  max-width: 240px;
+  box-shadow: 0 4px 16px var(--farm-shadow, rgba(122, 92, 62, 0.08));
+  position: relative;
+  font-family: var(--brand-sans, 'Nunito', sans-serif);
+}
+
+/* Triangle tail pointing toward Clippy */
+.clippy-bubble::before {
+  content: "";
+  position: absolute;
+  bottom: 16px;
+  left: -10px;
+  border-width: 8px 10px 8px 0;
+  border-style: solid;
+  border-color: transparent var(--farm-border, #c4a882) transparent transparent;
+}
+
+.clippy-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: 17px;
+  left: -7px;
+  border-width: 7px 9px 7px 0;
+  border-style: solid;
+  border-color: transparent var(--farm-card, #fffdf7) transparent transparent;
+}
+
+/* ── Text ── */
+.clippy-greeting {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--text-color, #3e2f1c);
+}
+
+.clippy-tips {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--farm-text-muted, #78695a);
+}
+
+.clippy-tips li {
+  text-align: left;
+}
+
+.clippy-tips a {
+  color: var(--farm-green, #4a7c59);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.clippy-tips a:hover {
+  color: var(--farm-green-hover, #3b6548);
+  text-decoration: underline;
+}
