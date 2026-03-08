@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
-import { useAuth } from "../../contexts/AuthContext.jsx";
+import { useAuth } from "../../contexts/useAuth.jsx";
 
 function Header({ account, setAccount }) {
   const { isAuthenticated, signOut, user } = useAuth();

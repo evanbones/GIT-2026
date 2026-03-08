@@ -39,6 +39,7 @@ ignore = [
     "EXE", # flake8-executable
     "T10", # debugger
     "TID", # flake8-tidy-imports
+    "I001", # unsorted imports
 
     "D100",   # ignore missing docs
     "D101",

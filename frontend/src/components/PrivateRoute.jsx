@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 
 function PrivateRoute({ children, allowedRoles = null, redirectTo = '/sign-in' }) {
   const { user, loading, isAuthenticated } = useAuth();
