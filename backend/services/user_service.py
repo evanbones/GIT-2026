@@ -17,7 +17,9 @@ def get_all_users(user_type=None):
         list[dict]: A list of dictionaries representing the users.
     """
     if user_type == "producer":
-        users = Producer.query.options(selectinload(Producer.items).selectinload(Item.prices)).all()
+        users = Producer.query.options(
+            selectinload(Producer.items).selectinload(Item.prices), selectinload(Producer.inventory)
+        ).all()
         return [u.to_dict() for u in users]
     elif user_type == "retailer":
         users = Retailer.query.all()
