@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn.jsx";
 import MapView from "./pages/MapView.jsx";
 import Onboard from "./pages/Onboard.jsx"
 import Clippy from "./components/Clippy/Clippy.jsx";
+import AuthHandler from "./components/AuthHandler.jsx";
 
 function App() {
   const [account, setAccount] = useState(false);
@@ -18,6 +19,7 @@ function App() {
     <>
       <BrowserRouter>
         <AuthProvider>
+          <AuthHandler />
           <Routes>
             <Route path="/" element={<Home account={account} setAccount={setAccount} />} />
             <Route path="/dashboard" element={

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../contexts/useAuth';
 import Header from "../components/Header/Header.jsx"
@@ -8,35 +8,11 @@ import './SignIn.css';
 function SignIn({ account, setAccount }) {
 
     const navigate = useNavigate();
-    const { login: googleLogin, checkAuthStatus } = useAuth();
+    const { login: googleLogin } = useAuth();
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const authStatus = params.get('auth');
 
-        if (authStatus === 'success') {
-            checkAuthStatus();
-            params.delete('auth');
-            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-            window.history.replaceState({}, document.title, newUrl);
-            navigate('/dashboard');
-        } else if (authStatus === 'new') {
-            checkAuthStatus();
-            params.delete('auth');
-            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-            window.history.replaceState({}, document.title, newUrl);
-            navigate('/onboard');
-        } else if (authStatus === 'error') {
-            setTimeout(() => {
-                setError('Authentication failed. Please try again.');
-            }, 0);
-            params.delete('auth');
-            const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
-            window.history.replaceState({}, document.title, newUrl);
-        }
-    }, [checkAuthStatus, navigate, setError]);
 
     const login = (e) => {
         e.preventDefault();
@@ -45,7 +21,7 @@ function SignIn({ account, setAccount }) {
         if (success) {
             setAccount(true);
             setError("");
-            navigate("/dashboard");
+            navigate("/onboard");
         } else {
             setError("Error: Login Invalid. Try Again");
         }
