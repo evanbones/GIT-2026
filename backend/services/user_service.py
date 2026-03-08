@@ -1,4 +1,5 @@
 from database import db
+from models.inventory import Inventory
 from models.user import Consumer, Producer, Retailer, User
 
 
@@ -52,7 +53,13 @@ def create_user(data):
             user_type="producer",
             company_name=data.get("company_name"),
             primary_address=data.get("primary_address"),
+            company_description=data.get("company_description"),
         )
+        db.session.add(user)
+        db.session.flush()
+        db.session.add(Inventory(producer_id=user.id))
+        db.session.commit()
+        return user.to_dict()
     elif user_type == "retailer":
         user = Retailer(
             email=email,

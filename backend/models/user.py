@@ -52,7 +52,7 @@ class Producer(User):
     id = db.Column(db.Integer, db.ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     company_name = db.Column(db.String(255), nullable=False)
     primary_address = db.Column(db.Text, nullable=False)
-    description = db.Column(db.Text)
+    company_description = db.Column("description", db.Text)
     images = db.Column(db.LargeBinary)
 
     __mapper_args__: ClassVar[dict] = {"polymorphic_identity": "producer"}

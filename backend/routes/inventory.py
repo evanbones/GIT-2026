@@ -65,11 +65,11 @@ class StockList(Resource):
         return {"stocks": get_all_stocks()}, 200
 
     def post(self):
-        """Add new stock for an item."""
+        """Add new stock for an item. Provide item_id for existing items, or a full item+prices object to create inline."""
         data = request.get_json()
         try:
             result = create_stock(data)
-        except SQLAlchemyError as e:
+        except (SQLAlchemyError, ValueError) as e:
             return {"error": str(e)}, 400
         else:
             return {"message": "Stock created", "stock": result}, 201
