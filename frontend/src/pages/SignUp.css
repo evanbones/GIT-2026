@@ -1,12 +1,11 @@
 .signup-page {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     min-height: 100vh;
-    padding: 2em;
 }
 
 .signup-form {
+    margin: auto; /* Centers the form in the space below the header */
     display: flex;
     flex-direction: column;
     align-items: flex-start;

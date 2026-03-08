@@ -6,7 +6,6 @@ function Home({ account, setAccount }) {
   return (
     <>
       <Header account={account} setAccount={setAccount} />
-      <Map />
       <OnboardForm />
     </>
   );

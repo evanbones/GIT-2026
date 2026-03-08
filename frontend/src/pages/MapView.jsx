@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Map from "../components/Map/Map.jsx";
 import Header from "../components/Header/Header.jsx";
-import SearchSidebar from "../components/SearchBar/SearchSidebar.jsx";
-import DistributorDetail from "../components/SearchBar/DistributorDetail.jsx";
-import Checkout from "../components/SearchBar/Checkout.jsx";
+import SearchSidebar from "../components/SearchPanel/SearchSidebar.jsx";
+import DistributorDetail from "../components/SearchPanel/DistributorDetail.jsx";
+import Checkout from "../components/SearchPanel/Checkout.jsx";
 
 const producers = [
     { 

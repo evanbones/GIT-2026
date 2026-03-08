@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header/Header.jsx"
+
 import './SignIn.css';
 
-function SignIn({ setAccount }) {
+function SignIn({ account, setAccount }) {
+
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const [email, setEmail] = useState("");
@@ -23,6 +26,7 @@ function SignIn({ setAccount }) {
 
     return (
         <div className="signin-page">
+            <Header account={account} setAccount={setAccount} />
             <form className="signin-form" onSubmit={login}>
                 <h2>Sign In</h2>
                 <input type="text" placeholder="Email" value={email}
