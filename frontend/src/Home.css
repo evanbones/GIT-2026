@@ -4,39 +4,43 @@
     align-items: center;
     width: 100%;
     min-height: 100vh;
+    background-color: var(--farm-cream);
+    overflow-x: hidden;
+}
 
-    background-image: linear-gradient(rgba(26, 26, 26, 0.2),
-            rgba(26, 26, 26, 0.4)), url('/homepage.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    overflow: hidden;
+/* Force the footer component to stretch full width */
+.home-wrapper > footer {
+    align-self: stretch;
+    width: 100%;
 }
 
 .hero-section {
     width: 100%;
-    min-height: 85vh;
+    min-height: 80vh;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    box-sizing: border-box;
+
+    background-image: linear-gradient(rgba(26, 26, 26, 0.3), rgba(26, 26, 26, 0.5)), url('/homepage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 .hero-content {
     max-width: 800px;
     width: 100%;
     padding: 4rem 3rem;
-
-    /* Matching the Onboard Form Card Style */
+    box-sizing: border-box;
     background-color: var(--farm-card, #ffffff);
     border: var(--border-thick) solid var(--farm-border);
     border-radius: var(--radius-lg);
-    box-shadow: 0 4px 0 var(--farm-border-light);
-    /* Flat structural shadow */
-
+    box-shadow: 0 8px 0 var(--farm-border-light);
     animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     opacity: 0;
     transform: translateY(30px);
@@ -81,7 +85,6 @@
     display: inline-block;
 }
 
-/* Primary Button uses the Onboard Farm Green */
 .btn-primary {
     background-color: var(--farm-green);
     color: white;
@@ -97,9 +100,8 @@
     transform: scale(0.98);
 }
 
-/* Secondary button uses the thick farm border */
 .btn-secondary {
-    background-color: transparent;
+    background-color: var(--farm-card);
     color: var(--text-color);
     border: var(--border-thick);
 }
@@ -108,12 +110,85 @@
     background-color: var(--farm-hover);
 }
 
+/* ── Features Section ── */
+.features-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+    box-sizing: border-box;
+    margin-top: 2rem; /* Removed the negative overlap so it doesn't crush the hero component */
+    margin-bottom: 4rem;
+    z-index: 2;
+}
+
+.feature-card {
+    background-color: var(--farm-card);
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 4px 0 var(--farm-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 0 var(--farm-green);
+    border-color: var(--farm-green);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+    font-family: var(--brand-serif);
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+}
+
+.feature-card p {
+    font-family: var(--brand-sans);
+    color: var(--farm-text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Map Preview ── */
 .map-preview-section {
     width: 100%;
     max-width: 1200px;
-    padding: 0 2rem 4rem;
+    padding: 0 2rem 6rem;
+    box-sizing: border-box;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section-title {
+    font-family: var(--brand-serif);
+    font-size: 2.5rem;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.map-container-wrapper {
+    width: 100%;
+    height: 500px;
+    border: var(--border-thick) solid var(--farm-border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 6px 0 var(--farm-border-light);
+    overflow: hidden;
+    background-color: #e0d7c6;
+    box-sizing: border-box; /* Crucial to keep map from overflowing width */
+    position: relative;
+    z-index: 1;
 }
 
 @keyframes fadeUp {

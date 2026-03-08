@@ -22,7 +22,7 @@ export default function AuthHandler() {
             } else if (authStatus === 'new') {
                 navigate('/onboard', { replace: true });
             } else if (authStatus === 'error') {
-                navigate('/sign-in', { replace: true });
+                navigate('/login', { replace: true });
             }
         }
     }, [location.search, location.pathname, checkAuthStatus, navigate]);

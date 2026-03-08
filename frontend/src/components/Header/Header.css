@@ -6,11 +6,9 @@
   justify-content: space-between;
   padding: 0 2rem;
   box-sizing: border-box;
-
   background-color: #ffffff;
   border-bottom: 1px solid #e0d7c6;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-
   z-index: 1000;
   font-family: var(--brand-sans, sans-serif);
 }
@@ -23,7 +21,7 @@
 }
 
 .navbar-logo {
-  height: 54px;
+  height: 110px;
   width: auto;
 }
 
