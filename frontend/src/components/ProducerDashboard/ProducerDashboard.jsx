@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { X, ArrowLeft } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useAuth } from '../../contexts/useAuth';
 import { inventoryAPI, b2bAPI } from '../../utils/api';
-import Inventory from '../Inventory/Inventory';
 import NewItem from '../Inventory/NewItem';
 import StockRow from '../Inventory/StockRow';
 import '../Inventory/Inventory.css';
@@ -14,7 +13,6 @@ export default function ProducerDashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [modal, setModal] = useState(false);
-    const [modalView, setModalView] = useState('inventory');
     const [editingStock, setEditingStock] = useState(null);
     const [offers, setOffers] = useState([]);
     const [groupBuys, setGroupBuys] = useState([]);
@@ -210,36 +208,20 @@ export default function ProducerDashboard() {
             )}
 
             {modal && (
-                <div className="modal-overlay" onClick={() => { setModal(false); setModalView('inventory'); }}>
+                <div className="modal-overlay" onClick={() => setModal(false)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button className="modal-close-btn" onClick={() => { setModal(false); setModalView('inventory'); }}>
+                        <button className="modal-close-btn" onClick={() => setModal(false)}>
                             <X size={18} />
                         </button>
-                        {modalView === 'inventory' && (
-                            <Inventory
-                                stocks={stocks}
-                                onAddItem={() => setModalView('new-item')}
-                                onStockChange={(id, updates) =>
-                                    setStocks(prev => prev.map(s => s.stock_id === id ? { ...s, ...updates } : s))
-                                }
-                            />
-                        )}
-                        {modalView === 'new-item' && (
-                            <>
-                                <button className="modal-back-btn" onClick={() => setModalView('inventory')}>
-                                    <ArrowLeft size={16} /> Back
-                                </button>
-                                <h2>New Item</h2>
-                                <NewItem
-                                    inventoryId={user.inventory_id}
-                                    producerId={user.id}
-                                    onAdd={(stock) => {
-                                        setStocks(prev => [...prev, stock]);
-                                        setModalView('inventory');
-                                    }}
-                                />
-                            </>
-                        )}
+                        <h2>New Item</h2>
+                        <NewItem
+                            inventoryId={user.inventory_id}
+                            producerId={user.id}
+                            onAdd={(stock) => {
+                                setStocks(prev => [...prev, stock]);
+                                setModal(false);
+                            }}
+                        />
                     </div>
                 </div>
             )}
